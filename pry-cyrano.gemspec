@@ -2,35 +2,33 @@
 
 require_relative "lib/pry/cyrano/version"
 
-Gem::Specification.new do |spec|
-  spec.name = "pry-cyrano"
-  spec.version = Pry::Cyrano::VERSION
-  spec.authors = ["morissetcl"]
-  spec.email = ["clement.morisset@potloc.com"]
+Gem::Specification.new do |gem|
+  gem.name = "pry-cyrano"
+  gem.version = Pry::Cyrano::VERSION
+  gem.authors = ["morissetcl"]
+  gem.email = ["clement.morisset@potloc.com"]
 
-  spec.summary = "TODO: Write a short summary, because RubyGems requires one."
-  spec.description = "TODO: Write a longer description or delete this line."
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
-  spec.license = "MIT"
-  spec.required_ruby_version = ">= 2.6.0"
+  gem.summary = "Mistyping killer"
+  gem.description = "Cyrano is a mistyping killer"
+  gem.homepage = "https://github.com/morissetcl/pry-cyrano"
+  gem.license = "MIT"
+  gem.required_ruby_version = ">= 2.6.0"
 
-  spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
-
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-  spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+  gem.metadata["homepage_uri"] = gem.homepage
+  gem.metadata["source_code_uri"] = "https://github.com/morissetcl/pry-cyranos"
+  gem.metadata["changelog_uri"] = "https://github.com/morissetcl/pry-cyrano/blob/master/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files = Dir.chdir(__dir__) do
+  gem.files = Dir.chdir(__dir__) do
     `git ls-files -z`.split("\x0").reject do |f|
       (File.expand_path(f) == __FILE__) || f.start_with?(*%w[bin/ test/ spec/ features/ .git .circleci appveyor])
     end
   end
-  spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
-
+  gem.bindir = "exe"
+  gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  gem.require_paths = ["lib"]
+  gem.add_runtime_dependency "pry", ">= 0.13", "< 0.15"
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
 
