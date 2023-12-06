@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/pry/cyrano/version"
+require_relative "lib/pry-cyrano/version"
 
 Gem::Specification.new do |gem|
   gem.name = "pry-cyrano"
@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
   gem.bindir = "exe"
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   gem.require_paths = ["lib"]
+  gem.add_dependency "rails", ">= 5.1.4"
   gem.add_runtime_dependency "pry", ">= 0.13", "< 0.15"
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
