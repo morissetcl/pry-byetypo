@@ -1,35 +1,21 @@
 # frozen_string_literal: true
 
 require 'pry'
+
 require 'zeitwerk'
 require 'byebug'
+require 'logger'
 
 require_relative 'pry-cyrano/version'
+require_relative 'pry-cyrano/application_dictionary'
 
 module Pry::Cyrano
   Pry.config.hooks.add_hook(:before_session, :eager_loading) do |output, exception, _pry_|
-    Zeitwerk::Loader.eager_load_all
-    @ar_models = ActiveRecord::Base.descendants.map { |model| model.name }
+    dictionary_instance = ApplicationDictionary.new
+    @ar_models_dictionary = dictionary_instance.active_record_models
+    @associations_dictionary = dictionary_instance.associations
   end
 
-  db_config = YAML.safe_load(File.read("./config/database.yml"), aliases: true)
-
-  begin
-    URI.parse(db_config["development"]["url"])
-  rescue URI::InvalidURIError => e
-    db_config["development"]["url"] = ENV["DATABASE_URL"]
-  end
-
-  begin
-    URI.parse(db_config["development"]["pool"])
-  rescue URI::InvalidURIError => e
-    db_config["development"]["pool"] = ENV["DATABASE_POOL"]
-  end
-
-  ActiveRecord::Base.establish_connection(db_config["development"])
-
-  singularize_table_names = ActiveRecord::Base.connection.tables.map { |a| a.chop }
-  @association_dictionary = ActiveRecord::Base.connection.tables.zip(singularize_table_names).flatten
   @attempts = 0
   MAX_ATTEMTPS = 3
 
@@ -70,9 +56,8 @@ module Pry::Cyrano
 
     def handle_uninitialized_constant(output, exception, _pry_)
       mispelled_word = exception.to_s.split.last
-      corrected_word = spell_checker(@ar_models).correct(mispelled_word).first
+      corrected_word = spell_checker(@ar_models_dictionary).correct(mispelled_word).first
 
-      byebug
       last_cmd = Pry.line_buffer.last.strip
       correct_cmd = last_cmd.gsub(mispelled_word, corrected_word)
 
@@ -84,7 +69,7 @@ module Pry::Cyrano
 
     def missing_from_clause_entry_table(output, exception, _pry_)
       unknown_table_name = exception.to_s.match(/PG::UndefinedTable: ERROR:  missing FROM-clause entry for table "(.*?)"\nLINE/)[1]
-      corrected_word = spell_checker(@association_dictionary).correct(unknown_table_name).first
+      corrected_word = spell_checker(@associations_dictionary).correct(unknown_table_name).first
 
       last_cmd = Pry.line_buffer.last.strip
       correct_cmd = last_cmd.gsub(/\b#{unknown_table_name}\b/, corrected_word)
@@ -97,7 +82,7 @@ module Pry::Cyrano
 
     def active_record_configuration_error(output, exception, _pry_)
       unknown_association = exception.to_s.match(/association named '(.*?)'/)[1]
-      corrected_word = spell_checker(@association_dictionary).correct(unknown_association).first
+      corrected_word = spell_checker(@associations_dictionary).correct(unknown_association).first
 
       last_cmd = Pry.line_buffer.last.strip
       correct_cmd = last_cmd.gsub(/\b#{unknown_association}\b/, corrected_word)
