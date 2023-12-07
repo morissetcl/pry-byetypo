@@ -4,7 +4,6 @@ require 'pry'
 
 require 'zeitwerk'
 require 'byebug'
-require 'logger'
 
 require_relative 'pry-cyrano/version'
 require_relative 'pry-cyrano/application_dictionary'

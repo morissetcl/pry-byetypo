@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 require 'byebug'
 
+require_relative 'setup/checks/database_url'
+require_relative 'setup/checks/database_pool'
+
 class ApplicationDictionary
 
   def initialize
@@ -36,21 +39,8 @@ class ApplicationDictionary
   end
 
   def configuration_checks
-    logger = Logger.new(STDOUT)
-
-    begin
-      URI.parse(development_database_config["url"])
-    rescue URI::InvalidURIError => e
-      logger.info("Database URL not readable, try to connect using the ENV[\"DATABASE_URL\"]")
-      development_database_config["url"] = ENV["DATABASE_URL"]
-    end
-
-    begin
-      URI.parse(development_database_config["pool"])
-    rescue URI::InvalidURIError => e
-      logger.info("Database pool not readable, try to connect using the ENV[\"DATABASE_POOL\"]")
-      development_database_config["pool"] = ENV["DATABASE_POOL"]
-    end
+    Setup::Checks::DatabaseUrl.check(development_database_config)
+    Setup::Checks::DatabasePool.check(development_database_config)
   end
 
   def database_config
