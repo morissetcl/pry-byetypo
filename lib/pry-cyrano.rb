@@ -13,6 +13,19 @@ module Pry::Cyrano
   end
 
   db_config = YAML.safe_load(File.read("./config/database.yml"), aliases: true)
+
+  begin
+    URI.parse(db_config["development"]["url"])
+  rescue URI::InvalidURIError => e
+    db_config["development"]["url"] = ENV["DATABASE_URL"]
+  end
+
+  begin
+    URI.parse(db_config["development"]["pool"])
+  rescue URI::InvalidURIError => e
+    db_config["development"]["pool"] = ENV["DATABASE_POOL"]
+  end
+
   ActiveRecord::Base.establish_connection(db_config["development"])
 
   singularize_table_names = ActiveRecord::Base.connection.tables.map { |a| a.chop }
