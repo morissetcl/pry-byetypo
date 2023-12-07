@@ -6,11 +6,11 @@ require 'zeitwerk'
 require 'byebug'
 
 require_relative 'pry-cyrano/version'
-require_relative 'pry-cyrano/application_dictionary'
+require_relative 'pry-cyrano/setup/application_dictionary'
 
 module Pry::Cyrano
   Pry.config.hooks.add_hook(:before_session, :eager_loading) do |output, exception, _pry_|
-    dictionary_instance = ApplicationDictionary.new
+    dictionary_instance = Setup::ApplicationDictionary.new
     @ar_models_dictionary = dictionary_instance.active_record_models
     @associations_dictionary = dictionary_instance.associations
   end
