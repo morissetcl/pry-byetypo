@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'checks/database_url'
-require_relative 'checks/database_pool'
+require_relative "checks/database_url"
+require_relative "checks/database_pool"
 
 module Setup
   class ApplicationDictionary
@@ -11,13 +11,9 @@ module Setup
       populate_associations
     end
 
-    def active_record_models
-      @active_record_models
-    end
+    attr_reader :active_record_models
 
-    def associations
-      @associations
-    end
+    attr_reader :associations
 
     private
 
