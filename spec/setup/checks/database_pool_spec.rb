@@ -3,10 +3,10 @@
 require "logger"
 
 RSpec.describe Setup::Checks::DatabasePool do
-  subject { described_class.check(database_config, logger)}
+  subject { described_class.check(database_config, logger) }
 
   let(:database_pool) { "25" }
-  let(:database_config) { {"adapter"=>"postgresql", "encoding"=>"unicode", "pool"=>database_pool, "url"=>"database_url"} }
+  let(:database_config) { {"adapter" => "postgresql", "encoding" => "unicode", "pool" => database_pool, "url" => "database_url"} }
   let(:logger) { Logger.new($stdout) }
 
   context "given a configuration with a valied database_pool" do
@@ -40,7 +40,7 @@ RSpec.describe Setup::Checks::DatabasePool do
       end
 
       it "logs a message with a info severity" do
-        expect(logger).to receive(:info).with( "[PRY-CYRANO] Database pool not readable, try to connect using the ENV[\"DATABASE_POOL\"]")
+        expect(logger).to receive(:info).with("[PRY-CYRANO] Database pool not readable, try to connect using the ENV[\"DATABASE_POOL\"]")
 
         subject
       end
