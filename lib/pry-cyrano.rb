@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require 'pry'
-
 require 'zeitwerk'
-require 'byebug'
 
 require_relative 'pry-cyrano/version'
 require_relative 'pry-cyrano/setup/application_dictionary'

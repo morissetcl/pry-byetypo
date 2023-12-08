@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'byebug'
 
 require_relative 'checks/database_url'
 require_relative 'checks/database_pool'
