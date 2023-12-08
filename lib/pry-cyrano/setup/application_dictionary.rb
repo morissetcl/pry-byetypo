@@ -5,15 +5,13 @@ require_relative "checks/database_pool"
 
 module Setup
   class ApplicationDictionary
+    attr_reader :active_record_models, :associations
+
     def initialize
       establish_db_connection
       populate_active_record_models_dictionary
       populate_associations
     end
-
-    attr_reader :active_record_models
-
-    attr_reader :associations
 
     private
 
@@ -34,8 +32,8 @@ module Setup
     end
 
     def configuration_checks
-      Setup::Checks::DatabaseUrl.check(development_database_config)
-      Setup::Checks::DatabasePool.check(development_database_config)
+      Setup::Checks::DatabaseUrl.check(development_database_config, logger)
+      Setup::Checks::DatabasePool.check(development_database_config, logger)
     end
 
     def database_config
@@ -44,6 +42,10 @@ module Setup
 
     def development_database_config
       @development_database_config ||= database_config["development"]
+    end
+
+    def logger
+      @logger = Logger.new($stdout)
     end
   end
 end

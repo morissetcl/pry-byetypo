@@ -4,18 +4,14 @@ module Setup
   module Checks
     class DatabasePool
       class << self
-        def check(database_config)
-          logger = Logger.new($stdout)
-
-          begin
-            URI.parse(database_config["pool"])
-          rescue URI::InvalidURIError
-            if ENV["DATABASE_POOL"].present?
-              logger.info(infer_database_pool_msg)
-              database_config["pool"] = ENV["DATABASE_POOL"]
-            else
-              logger.warn(missing_database_pool_msg)
-            end
+        def check(database_config, logger)
+          URI.parse(database_config["pool"])
+        rescue URI::InvalidURIError
+          if ENV["DATABASE_POOL"]
+            logger.info(infer_database_pool_msg)
+            database_config["pool"] = ENV["DATABASE_POOL"]
+          else
+            logger.warn(missing_database_pool_msg)
           end
         end
 

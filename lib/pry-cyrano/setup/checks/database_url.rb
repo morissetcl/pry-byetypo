@@ -4,18 +4,14 @@ module Setup
   module Checks
     class DatabaseUrl
       class << self
-        def check(database_config)
-          logger = Logger.new($stdout)
-
-          begin
-            URI.parse(database_config["url"])
-          rescue URI::InvalidURIError
-            if ENV["DATABASE_URL"].present?
-              logger.info(infer_database_url_msg)
-              database_config["url"] = ENV["DATABASE_URL"]
-            else
-              logger.warn(missing_database_url_msg)
-            end
+        def check(database_config, logger)
+          URI.parse(database_config["url"])
+        rescue URI::InvalidURIError
+          if ENV["DATABASE_URL"]
+            logger.info(infer_database_url_msg)
+            database_config["url"] = ENV["DATABASE_URL"]
+          else
+            logger.warn(missing_database_url_msg)
           end
         end
 
