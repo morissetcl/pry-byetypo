@@ -34,8 +34,12 @@ module Setup
     end
 
     def configuration_checks
-      Setup::Checks::DatabaseUrl.check(development_database_config)
-      Setup::Checks::DatabasePool.check(development_database_config)
+      Setup::Checks::DatabaseUrl.check(development_database_config, logger)
+      Setup::Checks::DatabasePool.check(development_database_config, logger)
+    end
+
+    def logger
+      @logger = Logger.new($stdout)
     end
 
     def database_config

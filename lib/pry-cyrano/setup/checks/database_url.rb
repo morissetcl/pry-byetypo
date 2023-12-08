@@ -4,9 +4,7 @@ module Setup
   module Checks
     class DatabaseUrl
       class << self
-        def check(database_config)
-          logger = Logger.new($stdout)
-
+        def check(database_config, logger)
           begin
             URI.parse(database_config["url"])
           rescue URI::InvalidURIError
