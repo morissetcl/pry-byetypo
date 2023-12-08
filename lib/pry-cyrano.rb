@@ -5,6 +5,7 @@ require "zeitwerk"
 
 require_relative "pry-cyrano/version"
 require_relative "pry-cyrano/setup/application_dictionary"
+require_relative "pry-cyrano/exception_handler"
 
 module Pry::Cyrano
   Pry.config.hooks.add_hook(:before_session, :eager_loading) do |output, exception, pry|
@@ -20,14 +21,19 @@ module Pry::Cyrano
   Pry.config.exception_handler = proc do |output, exception, pry|
     @attempts += 1
 
-    if @attempts < MAX_ATTEMTPS
-      handle_uninitialized_constant(output, exception, pry) if exception.to_s.start_with?("uninitialized constant")
-      missing_from_clause_entry_table(output, exception, pry) if exception.to_s.start_with?("PG::UndefinedTable: ERROR:  missing FROM-clause entry for table")
-      active_record_configuration_error(output, exception, pry) if exception.to_s.start_with?("Can't join")
-    end
-    reset_attempts
+    ExceptionHandler.call(output, exception, pry)
 
-    Pry::ExceptionHandler.handle_exception(output, exception, pry) unless handled_exception?(exception)
+    # # threshold
+    # if @attempts < MAX_ATTEMTPS
+    #   # rules
+    #   handle_uninitialized_constant(output, exception, pry) if exception.to_s.start_with?("uninitialized constant")
+    #   missing_from_clause_entry_table(output, exception, pry) if exception.to_s.start_with?("PG::UndefinedTable: ERROR:  missing FROM-clause entry for table")
+    #   active_record_configuration_error(output, exception, pry) if exception.to_s.start_with?("Can't join")
+    # end
+
+    # reset_attempts
+
+    # Pry::ExceptionHandler.handle_exception(output, exception, pry) unless handled_exception?(exception)
   end
 
   class << self
