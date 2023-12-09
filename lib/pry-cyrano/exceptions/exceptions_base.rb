@@ -21,4 +21,8 @@ class ExceptionsBase < Base
   def spell_checker(dictionary)
     DidYouMean::SpellChecker.new(dictionary: dictionary)
   end
+
+  def logger
+    @logger = Logger.new($stdout)
+  end
 end

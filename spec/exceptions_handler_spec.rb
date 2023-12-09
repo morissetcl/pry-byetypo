@@ -12,13 +12,13 @@ RSpec.describe ExceptionsHandler do
   context "given a NameError" do
     let(:exception) { NameError.new }
 
-    it "calls Exceptions::UninitializedConstant" do
+    it "calls Exceptions::UninitializedConstant error" do
       expect(Exceptions::UninitializedConstant).to receive(:call).with(output, exception, pry, application_dictionary[:ar_models_dictionary])
       subject
     end
   end
 
-  context "given a ActiveRecord::StatementInvalid" do
+  context "given a ActiveRecord::StatementInvalid error" do
     let(:exception) { ActiveRecord::StatementInvalid.new }
 
     it "calls Exceptions::MissingFromClauseEntryTable" do
@@ -27,7 +27,7 @@ RSpec.describe ExceptionsHandler do
     end
   end
 
-  context "given a ActiveRecord::ConfigurationError" do
+  context "given a ActiveRecord::ConfigurationError error" do
     let(:exception) { ActiveRecord::ConfigurationError.new }
 
     it "calls Exceptions::ActiveRecordConfigurationError" do

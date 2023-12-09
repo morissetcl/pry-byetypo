@@ -13,8 +13,8 @@ module Exceptions
       last_cmd = Pry.line_buffer.last.strip
       corrected_cmd = last_cmd.gsub(mispelled_word, corrected_word)
 
-      output.puts "🤓 #{mispelled_word} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓"
-      output.puts "🤓  running #{corrected_cmd} 🤓"
+      logger.info("🤓 #{mispelled_word} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓")
+      logger.info("🤓  running #{corrected_cmd} 🤓")
 
       pry.eval(corrected_cmd)
     end
