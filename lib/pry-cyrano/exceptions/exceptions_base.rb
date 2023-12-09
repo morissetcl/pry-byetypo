@@ -3,6 +3,10 @@
 require_relative "../base"
 
 class ExceptionsBase < Base
+  def call
+    correct_error
+  end
+
   private
 
   attr_reader :exception, :output, :pry, :dictionary

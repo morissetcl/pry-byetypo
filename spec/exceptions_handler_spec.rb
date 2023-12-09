@@ -7,7 +7,7 @@ RSpec.describe ExceptionsHandler do
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
-  let(:application_dictionary) { { ar_models_dictionary: ["User"], associations_dictionary: ["users", "user"] } }
+  let(:application_dictionary) { {ar_models_dictionary: ["User"], associations_dictionary: ["users", "user"]} }
 
   context "given a NameError" do
     let(:exception) { NameError.new }
