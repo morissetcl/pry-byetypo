@@ -3,7 +3,7 @@
 require_relative "exceptions_base"
 
 module Exceptions
-  class MissingFromClauseEntryTable < ExceptionsBase
+  class ActiveRecordStatementInvalid < ExceptionsBase
     private
 
     def correct_error

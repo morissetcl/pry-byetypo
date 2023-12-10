@@ -12,8 +12,8 @@ RSpec.describe ExceptionsHandler do
   context "given a NameError" do
     let(:exception) { NameError.new }
 
-    it "calls Exceptions::UninitializedConstant error" do
-      expect(Exceptions::UninitializedConstant).to receive(:call).with(output, exception, pry, application_dictionary[:ar_models_dictionary])
+    it "calls Exceptions::NameError error" do
+      expect(Exceptions::NameError).to receive(:call).with(output, exception, pry, application_dictionary[:ar_models_dictionary])
       subject
     end
   end
@@ -21,8 +21,8 @@ RSpec.describe ExceptionsHandler do
   context "given a ActiveRecord::StatementInvalid error" do
     let(:exception) { ActiveRecord::StatementInvalid.new }
 
-    it "calls Exceptions::MissingFromClauseEntryTable" do
-      expect(Exceptions::MissingFromClauseEntryTable).to receive(:call).with(output, exception, pry, application_dictionary[:associations_dictionary])
+    it "calls Exceptions::ActiveRecordStatementInvalid" do
+      expect(Exceptions::ActiveRecordStatementInvalid).to receive(:call).with(output, exception, pry, application_dictionary[:associations_dictionary])
       subject
     end
   end

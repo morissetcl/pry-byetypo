@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require_relative "base"
-require_relative "exceptions/uninitialized_constant"
-require_relative "exceptions/missing_from_clause_entry_table"
+require_relative "exceptions/active_record_statement_invalid"
 require_relative "exceptions/active_record_configuration_error"
+require_relative "exceptions/name_error"
 
 class ExceptionsHandler < Base
   attr_reader :exception, :output, :pry, :ar_models_dictionary, :associations_dictionary
@@ -20,10 +20,10 @@ class ExceptionsHandler < Base
     case exception
     in NameError
       # SurveyRespon.last
-      Exceptions::UninitializedConstant.call(output, exception, pry, ar_models_dictionary)
+      Exceptions::NameError.call(output, exception, pry, ar_models_dictionary)
     in ActiveRecord::StatementInvalid
       # SurveyResponse.joins(:survey_question).where(survey_quesion: {title: "ok"}).last
-      Exceptions::MissingFromClauseEntryTable.call(output, exception, pry, associations_dictionary)
+      Exceptions::ActiveRecordStatementInvalid.call(output, exception, pry, associations_dictionary)
     in ActiveRecord::ConfigurationError
       # SurveyResponse.joins(:survey_questions).where(survey_question: {title: "ok"}).last
       Exceptions::ActiveRecordConfigurationError.call(output, exception, pry, associations_dictionary)

@@ -3,7 +3,7 @@
 require_relative "exceptions_base"
 
 module Exceptions
-  class UninitializedConstant < ExceptionsBase
+  class NameError < ExceptionsBase
     private
 
     def correct_error

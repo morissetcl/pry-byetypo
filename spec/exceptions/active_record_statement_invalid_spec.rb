@@ -2,7 +2,7 @@
 
 require "active_record"
 
-RSpec.describe Exceptions::MissingFromClauseEntryTable do
+RSpec.describe Exceptions::ActiveRecordStatementInvalid do
   subject { described_class.call(output, exception, pry, dictionnary) }
 
   let(:output) { Pry::Output.new(pry) }
