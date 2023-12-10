@@ -8,7 +8,7 @@ module Exceptions
 
     def correct_error
       mispelled_word = exception.to_s.split.last
-      corrected_word = spell_checker(dictionary).correct(mispelled_word).first
+      corrected_word = spell_checker(ar_models_dictionary).correct(mispelled_word).first
 
       last_cmd = Pry.line_buffer.last.strip
       corrected_cmd = last_cmd.gsub(mispelled_word, corrected_word)

@@ -8,7 +8,7 @@ module Exceptions
 
     def correct_error
       unknown_table_name = exception.to_s.match(/PG::UndefinedTable: ERROR:  missing FROM-clause entry for table "(.*?)"\nLINE/)[1]
-      corrected_word = spell_checker(dictionary).correct(unknown_table_name).first
+      corrected_word = spell_checker(associations_dictionary).correct(unknown_table_name).first
 
       last_cmd = Pry.line_buffer.last.strip
       corrected_cmd = last_cmd.gsub(/\b#{unknown_table_name}\b/, corrected_word)

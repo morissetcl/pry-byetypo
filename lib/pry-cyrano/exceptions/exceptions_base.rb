@@ -9,17 +9,28 @@ class ExceptionsBase < Base
 
   private
 
-  attr_reader :exception, :output, :pry, :dictionary
+  attr_reader :exception, :output, :pry
 
-  def initialize(output, exception, pry, dictionary)
+  def initialize(output, exception, pry)
     @output = output
     @exception = exception
     @pry = pry
-    @dictionary = dictionary
+  end
+
+  def associations_dictionary
+    @associations_dictionary ||= store.transaction { |s| s["associations"] }
+  end
+
+  def ar_models_dictionary
+    @ar_models_dictionary ||= store.transaction { |s| s["active_record_models"] }
   end
 
   def spell_checker(dictionary)
     DidYouMean::SpellChecker.new(dictionary: dictionary)
+  end
+
+  def store
+    PStore.new("cyrano_dictionary.pstore")
   end
 
   def logger
