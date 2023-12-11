@@ -26,7 +26,7 @@ class ExceptionsHandler < Base
       # SurveyResponse.joins(:survey_questions).where(survey_question: {title: "ok"}).last
       Exceptions::ActiveRecordConfigurationError.call(output, exception, pry)
     else
-      Pry::ExceptionHandler.handle_exception(output, @exception, pry)
+      Pry::ExceptionHandler.handle_exception(output, exception, pry)
     end
   end
 end

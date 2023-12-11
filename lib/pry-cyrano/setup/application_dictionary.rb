@@ -2,10 +2,13 @@
 
 require_relative "checks/database_url"
 require_relative "checks/database_pool"
+require_relative "store"
+
 require "pstore"
 
 module Setup
   class ApplicationDictionary
+    include Store
 
     def initialize
       establish_db_connection
@@ -53,11 +56,8 @@ module Setup
       @development_database_config ||= database_config["development"]
     end
 
-    def store
-      @store ||= PStore.new("cyrano_dictionary.pstore")
-    end
-
     # By default we update the store every week.
+    # TODO: Make it configurable
     def staled_store?
       return true if store["synced_at"].nil?
 

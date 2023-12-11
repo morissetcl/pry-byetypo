@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require_relative "../base"
+require_relative "../setup/store"
 
 class ExceptionsBase < Base
+  include Setup::Store
+
   def call
     correct_error
   end
@@ -27,10 +30,6 @@ class ExceptionsBase < Base
 
   def spell_checker(dictionary)
     DidYouMean::SpellChecker.new(dictionary: dictionary)
-  end
-
-  def store
-    PStore.new("cyrano_dictionary.pstore")
   end
 
   def logger
