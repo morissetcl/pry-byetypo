@@ -3,7 +3,7 @@
 require "active_record"
 
 RSpec.describe ExceptionsHandler do
-  subject { described_class.call(output, exception, pry, application_dictionary) }
+  subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
@@ -13,7 +13,7 @@ RSpec.describe ExceptionsHandler do
     let(:exception) { NameError.new }
 
     it "calls Exceptions::NameError error" do
-      expect(Exceptions::NameError).to receive(:call).with(output, exception, pry, application_dictionary[:ar_models_dictionary])
+      expect(Exceptions::NameError).to receive(:call).with(output, exception, pry)
       subject
     end
   end
@@ -22,7 +22,7 @@ RSpec.describe ExceptionsHandler do
     let(:exception) { ActiveRecord::StatementInvalid.new }
 
     it "calls Exceptions::ActiveRecordStatementInvalid" do
-      expect(Exceptions::ActiveRecordStatementInvalid).to receive(:call).with(output, exception, pry, application_dictionary[:associations_dictionary])
+      expect(Exceptions::ActiveRecordStatementInvalid).to receive(:call).with(output, exception, pry)
       subject
     end
   end
@@ -31,7 +31,7 @@ RSpec.describe ExceptionsHandler do
     let(:exception) { ActiveRecord::ConfigurationError.new }
 
     it "calls Exceptions::ActiveRecordConfigurationError" do
-      expect(Exceptions::ActiveRecordConfigurationError).to receive(:call).with(output, exception, pry, application_dictionary[:associations_dictionary])
+      expect(Exceptions::ActiveRecordConfigurationError).to receive(:call).with(output, exception, pry)
       subject
     end
   end

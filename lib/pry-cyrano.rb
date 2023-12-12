@@ -9,16 +9,12 @@ require_relative "pry-cyrano/exceptions_handler"
 
 module Pry::Cyrano
   Pry.config.hooks.add_hook(:before_session, :eager_loading) do |output, exception, pry|
-    dictionary_instance = Setup::ApplicationDictionary.new
-    @application_dictionary = {
-      ar_models_dictionary: dictionary_instance.active_record_models,
-      associations_dictionary: dictionary_instance.associations
-    }
+    Setup::ApplicationDictionary.new
   end
 
   # TODO: Adds max_attempts
   # TODO: If max_attempt reached clean the last entries (eg: max entry 3 has been reached, we remove the last 3 history entries)
   Pry.config.exception_handler = proc do |output, exception, pry|
-    ExceptionsHandler.call(output, exception, pry, @application_dictionary)
+    ExceptionsHandler.call(output, exception, pry)
   end
 end

@@ -1,21 +1,31 @@
 # frozen_string_literal: true
 
 require_relative "../base"
+require_relative "../setup/store"
 
 class ExceptionsBase < Base
+  include Setup::Store
+
   def call
     correct_error
   end
 
   private
 
-  attr_reader :exception, :output, :pry, :dictionary
+  attr_reader :exception, :output, :pry
 
-  def initialize(output, exception, pry, dictionary)
+  def initialize(output, exception, pry)
     @output = output
     @exception = exception
     @pry = pry
-    @dictionary = dictionary
+  end
+
+  def associations_dictionary
+    @associations_dictionary ||= store.transaction { |s| s["associations"] }
+  end
+
+  def ar_models_dictionary
+    @ar_models_dictionary ||= store.transaction { |s| s["active_record_models"] }
   end
 
   def spell_checker(dictionary)
