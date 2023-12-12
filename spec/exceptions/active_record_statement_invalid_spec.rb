@@ -3,7 +3,7 @@
 require "active_record"
 
 RSpec.describe Exceptions::ActiveRecordStatementInvalid do
-  subject { described_class.call(output, exception, pry, dictionnary) }
+  subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
@@ -11,9 +11,16 @@ RSpec.describe Exceptions::ActiveRecordStatementInvalid do
   let(:exception) { ActiveRecord::StatementInvalid.new("PG::UndefinedTable: ERROR:  missing FROM-clause entry for table \"paychck\"\nLINE 1: ...\" = \"paychecks\".\"paycheck_id\" WHERE \"paych...\n                                                             ^\n") }
   let(:last_cmd) { "User.joins(:paycheck).where(paychck: {month: \"june\"}).last" }
   let(:corrected_cmd) { "User.joins(:paycheck).where(paycheck: {month: \"june\"}).last" }
+  let(:store_path) { "./spec/support/cyrano_dictionary_test.pstore" }
 
   describe "#call" do
-    before { allow(Pry).to receive(:line_buffer).and_return([last_cmd]) }
+    before do
+      ENV["CYRANO_STORE_PATH"] = store_path
+      PStore.new(store_path).transaction do |store|
+        store["associations"] = ["user", "users", "paycheck", "paychecks"]
+      end
+      allow(Pry).to receive(:line_buffer).and_return([last_cmd])
+    end
 
     it "outputs a corrected command and runs it" do
       expect(pry).to receive(:eval).with(corrected_cmd)
