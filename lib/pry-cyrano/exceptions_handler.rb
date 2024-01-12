@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "base"
-require_relative "exceptions/active_record_statement_invalid"
-require_relative "exceptions/active_record_configuration_error"
+require_relative "exceptions/active_record/statement_invalid"
+require_relative "exceptions/active_record/configuration_error"
 require_relative "exceptions/name_error"
 
 class ExceptionsHandler < Base
@@ -21,10 +21,10 @@ class ExceptionsHandler < Base
       Exceptions::NameError.call(output, exception, pry)
     in ActiveRecord::StatementInvalid
       # SurveyResponse.joins(:survey_question).where(survey_quesion: {title: "ok"}).last
-      Exceptions::ActiveRecordStatementInvalid.call(output, exception, pry)
+      Exceptions::ActiveRecord::StatementInvalid.call(output, exception, pry)
     in ActiveRecord::ConfigurationError
       # SurveyResponse.joins(:survey_questions).where(survey_question: {title: "ok"}).last
-      Exceptions::ActiveRecordConfigurationError.call(output, exception, pry)
+      Exceptions::ActiveRecord::ConfigurationError.call(output, exception, pry)
     else
       Pry::ExceptionHandler.handle_exception(output, exception, pry)
     end

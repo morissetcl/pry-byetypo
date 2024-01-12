@@ -2,14 +2,14 @@
 
 require "active_record"
 
-RSpec.describe Exceptions::ActiveRecordConfigurationError do
+RSpec.describe Exceptions::ActiveRecord::StatementInvalid do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
   let(:dictionnary) { ["paychecks", "paycheck"] }
-  let(:exception) { ActiveRecord::ConfigurationError.new("Can't join 'User' to association named 'paychecks'; perhaps you misspelled it?") }
-  let(:last_cmd) { "User.joins(:paychecks).where(paycheck: {month: \"june\"}).last" }
+  let(:exception) { ActiveRecord::StatementInvalid.new("PG::UndefinedTable: ERROR:  missing FROM-clause entry for table \"paychck\"\nLINE 1: ...\" = \"paychecks\".\"paycheck_id\" WHERE \"paych...\n                                                             ^\n") }
+  let(:last_cmd) { "User.joins(:paycheck).where(paychck: {month: \"june\"}).last" }
   let(:corrected_cmd) { "User.joins(:paycheck).where(paycheck: {month: \"june\"}).last" }
   let(:store_path) { "./spec/support/cyrano_dictionary_test.pstore" }
 

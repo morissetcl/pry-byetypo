@@ -6,17 +6,27 @@ module Exceptions
   class NameError < ExceptionsBase
     private
 
-    def correct_error
-      mispelled_word = exception.to_s.split.last
-      corrected_word = spell_checker(ar_models_dictionary).correct(mispelled_word).first
-
-      last_cmd = Pry.line_buffer.last.strip
-      corrected_cmd = last_cmd.gsub(mispelled_word, corrected_word)
-
-      logger.info("🤓 #{mispelled_word} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓")
+    def infer_cmd
+      logger.info("🤓 #{unknown_from_exception} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓")
       logger.info("🤓  running #{corrected_cmd} 🤓")
 
       pry.eval(corrected_cmd)
+    end
+
+    def unknown_from_exception
+      exception.to_s.split.last
+    end
+
+    def corrected_word
+      @corrected_word ||= spell_checker(ar_models_dictionary).correct(unknown_from_exception).first
+    end
+
+    def corrected_cmd
+      @corrected_cmd ||= last_cmd.gsub(unknown_from_exception, corrected_word)
+    end
+
+    def ar_models_dictionary
+      @ar_models_dictionary ||= store.transaction { |s| s["active_record_models"] }
     end
   end
 end

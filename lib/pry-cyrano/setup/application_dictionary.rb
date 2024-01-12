@@ -17,6 +17,8 @@ module Setup
 
     private
 
+    SEVEN_DAYS = 604800
+
     def populate_store
       store.transaction do
         store.abort unless staled_store?
@@ -61,7 +63,7 @@ module Setup
     def staled_store?
       return true if store["synced_at"].nil?
 
-      (store["synced_at"] + 604800) <= Time.now
+      (store["synced_at"] + SEVEN_DAYS) <= Time.now
     end
 
     def logger

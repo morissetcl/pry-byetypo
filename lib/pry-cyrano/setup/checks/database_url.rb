@@ -1,28 +1,25 @@
 # frozen_string_literal: true
 
+require_relative "base"
+
 module Setup
   module Checks
-    class DatabaseUrl
+    class DatabaseUrl < Base
       class << self
-        def check(database_config, logger)
-          URI.parse(database_config["url"])
-        rescue URI::InvalidURIError
-          if ENV["DATABASE_URL"]
-            logger.info(infer_database_url_msg)
-            database_config["url"] = ENV["DATABASE_URL"]
-          else
-            logger.warn(missing_database_url_msg)
-          end
+        def name
+          "url"
         end
 
-        private
+        def variable
+          "DATABASE_URL"
+        end
 
-        def missing_database_url_msg
+        def missing_variable_msg
           "[PRY-CYRANO] ENV[\"DATABASE_URL\"] is empty. Please add a value to it to make pry-cyrano work."
         end
 
-        def infer_database_url_msg
-          "[PRY-CYRANO] Database URL not readable, try to connect using the ENV[\"DATABASE_URL\"]"
+        def infer_database_variable_msg
+          "[PRY-CYRANO] Database #{name.upcase} not readable, try to connect using the ENV[\"DATABASE_URL\"]"
         end
       end
     end
