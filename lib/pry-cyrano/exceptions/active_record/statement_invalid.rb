@@ -7,7 +7,7 @@ module Exceptions
     class StatementInvalid < Base
       private
 
-      def correct_error
+      def infer_cmd
         logger.info("🤓 `#{unknown_from_exception}` table relation not found, running the command with `#{corrected_word}` assuming is what you meant. 🤓")
         logger.info("🤓  running #{corrected_cmd} 🤓")
 

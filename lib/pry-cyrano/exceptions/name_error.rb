@@ -6,7 +6,7 @@ module Exceptions
   class NameError < ExceptionsBase
     private
 
-    def correct_error
+    def infer_cmd
       logger.info("🤓 #{unknown_from_exception} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓")
       logger.info("🤓  running #{corrected_cmd} 🤓")
 

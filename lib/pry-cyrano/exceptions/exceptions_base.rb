@@ -7,7 +7,7 @@ class ExceptionsBase < Base
   include Setup::Store
 
   def call
-    correct_error
+    infer_cmd
   end
 
   private

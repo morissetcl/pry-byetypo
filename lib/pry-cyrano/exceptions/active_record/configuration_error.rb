@@ -7,7 +7,7 @@ module Exceptions
     class ConfigurationError < Base
       private
 
-      def correct_error
+      def infer_cmd
         logger.info("🤓 `#{unknown_from_exception}` association not found, running the command with `#{corrected_word}` assuming is what you meant. 🤓")
         logger.info("🤓  running #{corrected_cmd} 🤓")
 
