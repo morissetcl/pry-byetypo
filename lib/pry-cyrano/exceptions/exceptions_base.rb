@@ -20,19 +20,15 @@ class ExceptionsBase < Base
     @pry = pry
   end
 
-  def associations_dictionary
-    @associations_dictionary ||= store.transaction { |s| s["associations"] }
-  end
-
-  def ar_models_dictionary
-    @ar_models_dictionary ||= store.transaction { |s| s["active_record_models"] }
-  end
-
   def spell_checker(dictionary)
     DidYouMean::SpellChecker.new(dictionary: dictionary)
   end
 
   def logger
     @logger = Logger.new($stdout)
+  end
+
+  def last_cmd
+    @last_cmd ||= Pry.line_buffer.last.strip
   end
 end

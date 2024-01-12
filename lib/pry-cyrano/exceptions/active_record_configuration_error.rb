@@ -1,22 +1,20 @@
 # frozen_string_literal: true
 
-require_relative "exceptions_base"
+require_relative "active_record_exceptions"
 
 module Exceptions
-  class ActiveRecordConfigurationError < ExceptionsBase
+  class ActiveRecordConfigurationError < ActiveRecordExceptions
     private
 
     def correct_error
-      unknown_association = exception.to_s.match(/association named '(.*?)'/)[1]
-      corrected_word = spell_checker(associations_dictionary).correct(unknown_association).first
-
-      last_cmd = Pry.line_buffer.last.strip
-      corrected_cmd = last_cmd.gsub(/\b#{unknown_association}\b/, corrected_word)
-
-      logger.info("🤓 `#{unknown_association}` association not found, running the command with `#{corrected_word}` assuming is what you meant. 🤓")
+      logger.info("🤓 `#{unknown_from_exception}` association not found, running the command with `#{corrected_word}` assuming is what you meant. 🤓")
       logger.info("🤓  running #{corrected_cmd} 🤓")
 
       pry.eval(corrected_cmd)
+    end
+
+    def exception_regexp
+      /association named '(.*?)'/
     end
   end
 end
