@@ -21,8 +21,8 @@ RSpec.describe ExceptionsHandler do
   context "given a ActiveRecord::StatementInvalid error" do
     let(:exception) { ActiveRecord::StatementInvalid.new }
 
-    it "calls Exceptions::ActiveRecordStatementInvalid" do
-      expect(Exceptions::ActiveRecordStatementInvalid).to receive(:call).with(output, exception, pry)
+    it "calls Exceptions::ActiveRecord::StatementInvalid" do
+      expect(Exceptions::ActiveRecord::StatementInvalid).to receive(:call).with(output, exception, pry)
       subject
     end
   end
@@ -31,7 +31,7 @@ RSpec.describe ExceptionsHandler do
     let(:exception) { ActiveRecord::ConfigurationError.new }
 
     it "calls Exceptions::ActiveRecordConfigurationError" do
-      expect(Exceptions::ActiveRecordConfigurationError).to receive(:call).with(output, exception, pry)
+      expect(Exceptions::ActiveRecord::ConfigurationError).to receive(:call).with(output, exception, pry)
       subject
     end
   end
