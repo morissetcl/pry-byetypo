@@ -4,11 +4,22 @@ Autocorrect typo in your Pry REPL.
 
 This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
 
-Eg:
+#### Before
+
 ```ruby
-UserAccoint.last
-# Will run the following command UserAccount.last
-=>
+[1] pry(main)> Usert.last
+NameError: uninitialized constant Usert
+from (pry):3:in `__pry__'
+```
+
+#### After
+
+```ruby
+[1] pry(main)> Usert.last
+I, [2024-01-13T20:00:16.280710 #694]  INFO -- : 🤓 Usert does not exist, running the command with User assuming is what you meant. 🤓
+I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
+2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
+=> #<User id: 1, email: "yo@email.com">
 ```
 
 ## Installation
