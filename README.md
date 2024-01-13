@@ -1,20 +1,25 @@
 # Pry::Cyrano
 
-TODO: Delete this and the text below, and describe your gem
+Autocorrect typo in your Pry REPL.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pry/cyrano`. To experiment with that code, run `bin/console` for an interactive prompt.
+This small Pry plugin captures exceptions and deduces the command based on your database information.
+
+Eg:
+```ruby
+UserAccoint.last
+# Will run the following command UserAccount.last
+=>
+```
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
-
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ bundle add pry-cyrano
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+    $ gem install pry-cyrano
 
 ## Usage
 
@@ -28,15 +33,15 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Troubleshooting
 
-Pry-cyrano is tied to your development database. During the initialization it will try to establish a connection to fetch the tables available in your project. It will fetch the information for the `development` environment in the `database.yml` file
+Pry-cyrano is linked to your development database. During initialization, it will attempt to establish a connection to retrieve the tables available in your project. It will fetch the information for the development environment from the `database.yml` file.
 
 ### Unreadable database URL (URI::InvalidURIError)
 
-If the database is not a readable string the gem will not able to establish a connection. If you face such problem be sure to add in your .env a `DATABASE_URL` variable with the url of your database easily readable.
+If the database connection string is not readable, the gem will be unable to establish a connection. If you encounter such an issue, make sure to add a `DATABASE_URL` variable to your `.env` file with the easily readable URL of your database.
 
 ### Unreadable connection pool (ActiveRecord::ConnectionTimeoutError)
 
-If your number of connection pool is not readable you will face a `ActiveRecord::ConnectionTimeoutError`. If you face such problem be sure to add in your .env a `DATABASE_POOL` variable.
+If the number of connections in your pool is not readable, you may encounter an `ActiveRecord::ConnectionTimeoutError`. If you experience this issue, make sure to add a `DATABASE_POOL` variable to your `.env` file.
 
 ## Contributing
 
