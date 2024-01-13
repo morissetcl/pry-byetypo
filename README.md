@@ -2,7 +2,7 @@
 
 Autocorrect typo in your Pry REPL.
 
-This small Pry plugin captures exceptions and deduces the command based on your database information.
+This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
 
 Eg:
 ```ruby
