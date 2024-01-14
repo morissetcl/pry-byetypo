@@ -1,6 +1,6 @@
 # Pry::Cyrano
 
-Autocorrect typo in your Pry REPL.
+Autocorrects typos in your Pry REPL.
 
 This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
 
@@ -24,17 +24,94 @@ I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add pry-cyrano
+Install the gem and add to the application's Gemfile, under the `development` group, by executing:
+
+```
+bundle add pry-cyrano
+```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install pry-cyrano
+```
+gem install pry-cyrano
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Open a PRY console.
+2. Start your daily work.
+3. Let `pry-cyrano` remove frictions. 🚀
+
+## Under the hood
+
+#### 1. Cyrano dictionary
+
+When you open a new Pry console, the gem will generate a `cyrano_dictionary.pstore` file containing three pieces of information:
+
+- A list of the ActiveRecord models in your application (e.g. `User`, `Account`).
+- A list of the ActiveRecord associations in your application (e.g. `user`, `users`, `account`, `accounts`).
+- A timestamp representing the last time the `cyrano_dictionary` was updated. (by default updated every week).
+
+This file is generated at the root of your application by default. If you want to update its location, you can configure the path by adding a `CYRANO_STORE_PATH` entry in your `.env` file.
+
+#### 2. Captured exceptions
+
+We currently captures and correct 3 exceptions:
+
+- `NameError`
+
+This error occurs when you mispelled a model in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected model.
+
+```ruby
+[1] pry(main)> Usert.last
+I, [2024-01-13T20:00:16.280710 #694]  INFO -- : 🤓 Usert does not exist, running the command with User assuming is what you meant. 🤓
+I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
+2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
+=> #<User id: 1, email: "yo@email.com">
+```
+
+- `ActiveRecord::ConfigurationError`
+
+Raised when association is being configured improperly or user tries to use offset and limit together with `ActiveRecord::Base.has_many` or `ActiveRecord::Base.has_and_belongs_to_many` associations.
+
+eg:
+
+```ruby
+[6] pry(main)> User.joins(:group).where(groups: { name: "Landlord" }).last
+ActiveRecord::ConfigurationError: Can't join 'User' to association named 'group'; perhaps you misspelled it?
+```
+In this example a `user` has many `groups` and ActiveRecord is not able to generate the query.
+
+This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+
+```ruby
+[1] pry(main)> User.joins(:group).where(group: { name: "Landlord" })
+I, [2024-01-13T22:45:16.297811 #1079]  INFO -- : 🤓 `group` association not found, running the command with `groups` assuming is what you meant. 🤓
+I, [2024-01-13T22:45:16.297972 #1079]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }) 🤓
+2024-01-13 22:45:16.319544 D [1079:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.6ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1  [["name", "Landlord"]]
+=> []
+```
+
+- `ActiveRecord::StatementInvalid`
+
+The query attempts to reference columns or conditions related to a table, but the table is not properly included in the FROM clause.
+
+```ruby
+[1] pry(main)> User.joins(:groups).where(grous: { name: "Landlord" }).last
+ActiveRecord::StatementInvalid: PG::UndefinedTable: ERROR:  missing FROM-clause entry for table "grous"
+LINE 1: ..."group_id" WHERE "users"."deleted_at" IS NULL AND "grous"."n...
+```
+
+This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+
+```ruby
+1] pry(main)> User.joins(:groups).where(grous: { name: "Landlord" }).last
+I, [2024-01-14T23:50:49.273043 #1248]  INFO -- : 🤓 `grous` table relation not found, running the command with `groups` assuming is what you meant. 🤓
+I, [2024-01-14T23:50:49.273177 #1248]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }).last 🤓
+2024-01-14 23:50:49.281956 D [1248:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (2.1ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1 ORDER BY "users"."id" DESC LIMIT $2  [["name", "Landlord"], ["LIMIT", 1]]
+```
+
 
 ## Development
 
