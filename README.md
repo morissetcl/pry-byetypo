@@ -86,7 +86,7 @@ In this example a `user` has many `groups` and ActiveRecord is not able to gener
 This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
 
 ```ruby
-[1] pry(main)> User.joins(:group).where(group: { name: "Landlord" })
+[1] pry(main)> User.joins(:group).where(groups: { name: "Landlord" })
 I, [2024-01-13T22:45:16.297811 #1079]  INFO -- : 🤓 `group` association not found, running the command with `groups` assuming is what you meant. 🤓
 I, [2024-01-13T22:45:16.297972 #1079]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }) 🤓
 2024-01-13 22:45:16.319544 D [1079:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.6ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1  [["name", "Landlord"]]
