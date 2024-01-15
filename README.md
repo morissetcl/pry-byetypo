@@ -45,7 +45,7 @@ gem install pry-cyrano
 
 ## Under the hood
 
-#### 1. Cyrano dictionary
+### 1. Cyrano dictionary
 
 When you open a new Pry console, the gem will generate a `cyrano_dictionary.pstore` file containing three pieces of information:
 
@@ -55,11 +55,9 @@ When you open a new Pry console, the gem will generate a `cyrano_dictionary.psto
 
 This file is generated at the root of your application by default. If you want to update its location, you can configure the path by adding a `CYRANO_STORE_PATH` entry in your `.env` file.
 
-#### 2. Captured exceptions
+### 2. Captured exceptions
 
-We currently captures and correct 3 exceptions:
-
-- `NameError`
+#### NameError
 
 This error occurs when you mispelled a model in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected model.
 
@@ -71,7 +69,7 @@ I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
 => #<User id: 1, email: "yo@email.com">
 ```
 
-- `ActiveRecord::ConfigurationError`
+#### ActiveRecord::ConfigurationError
 
 Raised when association is being configured improperly or user tries to use offset and limit together with `ActiveRecord::Base.has_many` or `ActiveRecord::Base.has_and_belongs_to_many` associations.
 
@@ -81,9 +79,9 @@ eg:
 [6] pry(main)> User.joins(:group).where(groups: { name: "Landlord" }).last
 ActiveRecord::ConfigurationError: Can't join 'User' to association named 'group'; perhaps you misspelled it?
 ```
-In this example a `user` has many `groups` and ActiveRecord is not able to generate the query.
 
 This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+
 
 ```ruby
 [1] pry(main)> User.joins(:group).where(groups: { name: "Landlord" })
@@ -93,7 +91,7 @@ I, [2024-01-13T22:45:16.297972 #1079]  INFO -- : 🤓  running User.joins(:group
 => []
 ```
 
-- `ActiveRecord::StatementInvalid`
+#### ActiveRecord::StatementInvalid
 
 The query attempts to reference columns or conditions related to a table, but the table is not properly included in the FROM clause.
 
