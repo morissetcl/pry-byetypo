@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pry-cyrano (0.1.0)
+    pry-cyrano (1.0.0)
       pry (>= 0.13, < 0.15)
       rails (>= 5.1.4)
 
