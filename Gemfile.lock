@@ -3,7 +3,7 @@ PATH
   specs:
     pry-cyrano (1.0.0)
       pry (>= 0.13, < 0.15)
-      rails (>= 6.1.0)
+      rails (~> 7.0)
 
 GEM
   remote: https://rubygems.org/
