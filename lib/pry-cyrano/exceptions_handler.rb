@@ -17,13 +17,16 @@ class ExceptionsHandler < Base
   def call
     case exception
     in NameError
-      # SurveyRespon.last
+      # eg: Usert.last
       Exceptions::NameError.call(output, exception, pry)
-    in ActiveRecord::StatementInvalid
-      # SurveyResponse.joins(:survey_question).where(survey_quesion: {title: "ok"}).last
+    in ActiveRecord::StatementInvalid => error
+      # ActiveRecord::StatementInvalid is a Superclass for all database execution errors.
+      # We only need to one including an `UndefinedTable` error.
+      # eg: User.joins(:groups).where(grous: { name: "Landlord" }).last
+      return unless error.message.include?("UndefinedTable")
       Exceptions::ActiveRecord::StatementInvalid.call(output, exception, pry)
     in ActiveRecord::ConfigurationError
-      # SurveyResponse.joins(:survey_questions).where(survey_question: {title: "ok"}).last
+      # eg:  User.joins(:group).where(groups: { name: "Landlord" }).last
       Exceptions::ActiveRecord::ConfigurationError.call(output, exception, pry)
     else
       Pry::ExceptionHandler.handle_exception(output, exception, pry)

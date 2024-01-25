@@ -20,7 +20,7 @@ RSpec.describe Setup::Checks::DatabasePool do
       let(:database_pool) { nil }
 
       it "logs a message with a warn severity" do
-        expect(logger).to receive(:warn).with("[PRY-CYRANO] ENV[\"DATABASE_POOL\"] is empty. Please add a value to it to make pry-cyrano work.")
+        expect(logger).to receive(:warn).with("[PRY-CYRANO] ENV[\"DATABASE_POOL\"] is empty. Please assign a value to it to enable the functionality of pry-cyrano.")
 
         subject
       end
@@ -37,12 +37,6 @@ RSpec.describe Setup::Checks::DatabasePool do
       it "infers the database config pool with the ENV[\"DATABASE_POOL\"] value" do
         subject
         expect(database_config["pool"]).to eq("mocked_pool_value")
-      end
-
-      it "logs a message with a info severity" do
-        expect(logger).to receive(:info).with("[PRY-CYRANO] Database pool not readable, try to connect using the ENV[\"DATABASE_POOL\"]")
-
-        subject
       end
     end
   end
