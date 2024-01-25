@@ -1,4 +1,4 @@
-# Pry::Cyrano
+# PRY-CYRANO
 
 Autocorrects typos in your Pry REPL.
 
