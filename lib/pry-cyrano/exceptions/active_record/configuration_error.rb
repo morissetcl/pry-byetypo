@@ -7,13 +7,6 @@ module Exceptions
     class ConfigurationError < Base
       private
 
-      def infer_cmd
-        logger.info("🤓 `#{unknown_from_exception}` association not found, running the command with `#{corrected_word}` assuming is what you meant. 🤓")
-        logger.info("🤓  running #{corrected_cmd} 🤓")
-
-        pry.eval(corrected_cmd)
-      end
-
       def exception_regexp
         /association named '(.*?)'/
       end

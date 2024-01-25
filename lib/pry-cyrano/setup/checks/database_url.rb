@@ -15,11 +15,7 @@ module Setup
         end
 
         def missing_variable_msg
-          "[PRY-CYRANO] ENV[\"DATABASE_URL\"] is empty. Please add a value to it to make pry-cyrano work."
-        end
-
-        def infer_database_variable_msg
-          "[PRY-CYRANO] Database #{name.upcase} not readable, try to connect using the ENV[\"DATABASE_URL\"]"
+          "[PRY-CYRANO] ENV[\"DATABASE_URL\"] is empty. Please assign a value to it to enable the functionality of pry-cyrano."
         end
       end
     end

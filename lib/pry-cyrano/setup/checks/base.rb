@@ -7,8 +7,8 @@ class Base
     def check(database_config, logger)
       URI.parse(database_config[name])
     rescue URI::InvalidURIError
+      # Try to connect using the ENV variables.
       if ENV[variable]
-        logger.info(infer_database_variable_msg)
         database_config[name] = ENV[variable]
       else
         logger.warn(missing_variable_msg)

@@ -20,7 +20,7 @@ RSpec.describe Setup::Checks::DatabaseUrl do
       let(:database_url) { nil }
 
       it "logs a message with a warn severity" do
-        expect(logger).to receive(:warn).with("[PRY-CYRANO] ENV[\"DATABASE_URL\"] is empty. Please add a value to it to make pry-cyrano work.")
+        expect(logger).to receive(:warn).with("[PRY-CYRANO] ENV[\"DATABASE_URL\"] is empty. Please assign a value to it to enable the functionality of pry-cyrano.")
 
         subject
       end
@@ -37,12 +37,6 @@ RSpec.describe Setup::Checks::DatabaseUrl do
       it "infers the database config URL with the ENV[\"DATABASE_URL\"] value" do
         subject
         expect(database_config["url"]).to eq("mocked_url_value")
-      end
-
-      it "logs a message with a info severity" do
-        expect(logger).to receive(:info).with("[PRY-CYRANO] Database URL not readable, try to connect using the ENV[\"DATABASE_URL\"]")
-
-        subject
       end
     end
   end
