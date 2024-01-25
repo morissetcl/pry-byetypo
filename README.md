@@ -1,24 +1,115 @@
 # Pry::Cyrano
 
-TODO: Delete this and the text below, and describe your gem
+Autocorrects typos in your Pry REPL.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/pry/cyrano`. To experiment with that code, run `bin/console` for an interactive prompt.
+This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
+
+#### Before
+
+```ruby
+[1] pry(main)> Usert.last
+NameError: uninitialized constant Usert
+from (pry):3:in `__pry__'
+```
+
+#### After
+
+```ruby
+[1] pry(main)> Usert.last
+I, [2024-01-13T20:00:16.280710 #694]  INFO -- : 🤓 Usert does not exist, running the command with User assuming is what you meant. 🤓
+I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
+2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
+=> #<User id: 1, email: "yo@email.com">
+```
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
 
-Install the gem and add to the application's Gemfile by executing:
+Install the gem and add to the application's Gemfile, under the `development` group, by executing:
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+```
+bundle add pry-cyrano
+```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+```
+gem install pry-cyrano
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Open a PRY console.
+2. Start your daily work.
+3. Let `pry-cyrano` remove frictions. 🚀
+
+## Under the hood
+
+### 1. Cyrano dictionary
+
+When you open a new Pry console, the gem will generate a `cyrano_dictionary.pstore` file containing three pieces of information:
+
+- A list of the ActiveRecord models in your application (e.g. `User`, `Account`).
+- A list of the ActiveRecord associations in your application (e.g. `user`, `users`, `account`, `accounts`).
+- A timestamp representing the last time the `cyrano_dictionary` was updated. (by default updated every week).
+
+This file is generated at the root of your application by default. If you want to update its location, you can configure the path by adding a `CYRANO_STORE_PATH` entry in your `.env` file.
+
+### 2. Captured exceptions
+
+#### NameError
+
+This error occurs when you mispelled a model in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected model.
+
+```ruby
+[1] pry(main)> Usert.last
+I, [2024-01-13T20:00:16.280710 #694]  INFO -- : 🤓 Usert does not exist, running the command with User assuming is what you meant. 🤓
+I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
+2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
+=> #<User id: 1, email: "yo@email.com">
+```
+
+#### ActiveRecord::ConfigurationError
+
+Raised when association is being configured improperly or user tries to use offset and limit together with `ActiveRecord::Base.has_many` or `ActiveRecord::Base.has_and_belongs_to_many` associations.
+
+eg:
+
+```ruby
+[6] pry(main)> User.joins(:group).where(groups: { name: "Landlord" }).last
+ActiveRecord::ConfigurationError: Can't join 'User' to association named 'group'; perhaps you misspelled it?
+```
+
+This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+
+
+```ruby
+[1] pry(main)> User.joins(:group).where(groups: { name: "Landlord" })
+I, [2024-01-13T22:45:16.297811 #1079]  INFO -- : 🤓 `group` association not found, running the command with `groups` assuming is what you meant. 🤓
+I, [2024-01-13T22:45:16.297972 #1079]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }) 🤓
+2024-01-13 22:45:16.319544 D [1079:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.6ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1  [["name", "Landlord"]]
+=> []
+```
+
+#### ActiveRecord::StatementInvalid
+
+The query attempts to reference columns or conditions related to a table, but the table is not properly included in the FROM clause.
+
+```ruby
+[1] pry(main)> User.joins(:groups).where(grous: { name: "Landlord" }).last
+ActiveRecord::StatementInvalid: PG::UndefinedTable: ERROR:  missing FROM-clause entry for table "grous"
+LINE 1: ..."group_id" WHERE "users"."deleted_at" IS NULL AND "grous"."n...
+```
+
+This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+
+```ruby
+1] pry(main)> User.joins(:groups).where(grous: { name: "Landlord" }).last
+I, [2024-01-14T23:50:49.273043 #1248]  INFO -- : 🤓 `grous` table relation not found, running the command with `groups` assuming is what you meant. 🤓
+I, [2024-01-14T23:50:49.273177 #1248]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }).last 🤓
+2024-01-14 23:50:49.281956 D [1248:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (2.1ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1 ORDER BY "users"."id" DESC LIMIT $2  [["name", "Landlord"], ["LIMIT", 1]]
+```
+
 
 ## Development
 
@@ -28,15 +119,15 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Troubleshooting
 
-Pry-cyrano is tied to your development database. During the initialization it will try to establish a connection to fetch the tables available in your project. It will fetch the information for the `development` environment in the `database.yml` file
+Pry-cyrano is linked to your development database. During initialization, it will attempt to establish a connection to retrieve the tables available in your project. It will fetch the information for the development environment from the `database.yml` file.
 
 ### Unreadable database URL (URI::InvalidURIError)
 
-If the database is not a readable string the gem will not able to establish a connection. If you face such problem be sure to add in your .env a `DATABASE_URL` variable with the url of your database easily readable.
+If the database connection string is not readable, the gem will be unable to establish a connection. If you encounter such an issue, make sure to add a `DATABASE_URL` variable to your `.env` file with the easily readable URL of your database.
 
 ### Unreadable connection pool (ActiveRecord::ConnectionTimeoutError)
 
-If your number of connection pool is not readable you will face a `ActiveRecord::ConnectionTimeoutError`. If you face such problem be sure to add in your .env a `DATABASE_POOL` variable.
+If the number of connections in your pool is not readable, you may encounter an `ActiveRecord::ConnectionTimeoutError`. If you experience this issue, make sure to add a `DATABASE_POOL` variable to your `.env` file.
 
 ## Contributing
 
