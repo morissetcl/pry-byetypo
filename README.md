@@ -1,6 +1,6 @@
 # PRY-CYRANO
 
-Autocorrects typos in your Pry REPL.
+Autocorrects typos in your Pry console.
 
 This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
 
