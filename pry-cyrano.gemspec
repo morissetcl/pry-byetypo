@@ -29,5 +29,6 @@ Gem::Specification.new do |gem|
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   gem.require_paths = ["lib"]
   gem.add_runtime_dependency "rails", "~> 7.0"
+  gem.add_runtime_dependency "colorize", "~> 1.1.0"
   gem.add_runtime_dependency "pry", ">= 0.13", "< 0.15"
 end

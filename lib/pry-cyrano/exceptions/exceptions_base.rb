@@ -2,14 +2,13 @@
 
 require_relative "../base"
 require_relative "../setup/store"
+require "colorize"
 
 class ExceptionsBase < Base
   include Setup::Store
 
   def call
-    logger.info("🤓 #{unknown_from_exception} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓")
-    logger.info("🤓  running #{corrected_cmd} 🤓")
-
+    logger.info("#{unknown_from_exception} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓".blue.on_red.blink)
     pry.eval(corrected_cmd)
   end
 
