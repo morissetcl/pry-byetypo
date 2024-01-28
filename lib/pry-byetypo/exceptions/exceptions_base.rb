@@ -8,8 +8,8 @@ class ExceptionsBase < Base
   include Setup::Store
 
   def call
-    logger.info("`#{unknown_from_exception}` not working, running:".colorize(color: :green, mode: :bold))
-    logger.info(corrected_cmd.to_s.colorize(color: :green, mode: :bold))
+    logger.error(exception.to_s.colorize(color: :light_red, mode: :bold))
+    logger.info("Running: #{corrected_cmd}".colorize(color: :green, mode: :bold))
 
     pry.eval(corrected_cmd)
   end
