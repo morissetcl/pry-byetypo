@@ -8,7 +8,7 @@ require_relative "exceptions/name_error"
 class ExceptionsHandler < Base
   attr_reader :exception, :output, :pry
 
-  UNITIALIZED_CONSTANT = "uninitialized constant"
+  UNINITIALIZED_CONSTANT = "uninitialized constant"
   UNDEFINED_TABLE = "UndefinedTable"
 
   def initialize(output, exception, pry)
@@ -21,12 +21,14 @@ class ExceptionsHandler < Base
     case exception
     in NameError => error
       # eg: Usert.last
-      return pry_exception_handler unless error.message.include?(UNITIALIZED_CONSTANT)
+      # NameError is a Superclass for all undefined statement.
+      # In this context We only need to one including an `uninitialized constant` error.
+      return pry_exception_handler unless error.message.include?(UNINITIALIZED_CONSTANT)
       Exceptions::NameError.call(output, exception, pry)
     in ActiveRecord::StatementInvalid => error
+      # eg: User.joins(:groups).where(grous: { name: "Landlord" }).last
       # ActiveRecord::StatementInvalid is a Superclass for all database execution errors.
       # We only need to one including an `UndefinedTable` error.
-      # eg: User.joins(:groups).where(grous: { name: "Landlord" }).last
       return pry_exception_handler unless error.message.include?(UNDEFINED_TABLE)
       Exceptions::ActiveRecord::StatementInvalid.call(output, exception, pry)
     in ActiveRecord::ConfigurationError
