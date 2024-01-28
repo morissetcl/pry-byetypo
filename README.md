@@ -63,8 +63,8 @@ This error occurs when you mispelled a model in your REPL. The gem will catch th
 
 ```ruby
 [1] pry(main)> Usert.last
-I, [2024-01-13T20:00:16.280710 #694]  INFO -- : 🤓 Usert does not exist, running the command with User assuming is what you meant. 🤓
-I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
+I, [2024-01-13T20:00:16.280710 #694]  INFO -- : `Usert` not working, running:
+I, [2024-01-13T20:00:16.281237 #694]  INFO -- : User.last
 2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
 => #<User id: 1, email: "yo@email.com">
 ```
@@ -85,8 +85,8 @@ This plugin will look into the `cyrano_dictionary` file to find the closest matc
 
 ```ruby
 [1] pry(main)> User.joins(:group).where(groups: { name: "Landlord" })
-I, [2024-01-13T22:45:16.297811 #1079]  INFO -- : 🤓 `group` association not found, running the command with `groups` assuming is what you meant. 🤓
-I, [2024-01-13T22:45:16.297972 #1079]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }) 🤓
+I, [2024-01-13T22:45:16.297811 #1079]  INFO -- : `group` not working, running.
+I, [2024-01-13T22:45:16.297972 #1079]  INFO -- : User.joins(:groups).where(groups: { name: "Landlord" })
 2024-01-13 22:45:16.319544 D [1079:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.6ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1  [["name", "Landlord"]]
 => []
 ```
@@ -105,8 +105,8 @@ This plugin will look into the `cyrano_dictionary` file to find the closest matc
 
 ```ruby
 1] pry(main)> User.joins(:groups).where(grous: { name: "Landlord" }).last
-I, [2024-01-14T23:50:49.273043 #1248]  INFO -- : 🤓 `grous` table relation not found, running the command with `groups` assuming is what you meant. 🤓
-I, [2024-01-14T23:50:49.273177 #1248]  INFO -- : 🤓  running User.joins(:groups).where(groups: { name: "Landlord" }).last 🤓
+I, [2024-01-14T23:50:49.273043 #1248]  INFO -- : `grous` not working, running:
+I, [2024-01-14T23:50:49.273177 #1248]  INFO -- : User.joins(:groups).where(groups: { name: "Landlord" }).last
 2024-01-14 23:50:49.281956 D [1248:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (2.1ms)  SELECT "users".* FROM "users" INNER JOIN "user_groups" ON "user_groups"."user_id" = "users"."id" INNER JOIN "groups" ON "groups"."id" = "user_groups"."group_id" WHERE "users"."deleted_at" IS NULL AND "groups"."name" = $1 ORDER BY "users"."id" DESC LIMIT $2  [["name", "Landlord"], ["LIMIT", 1]]
 ```
 

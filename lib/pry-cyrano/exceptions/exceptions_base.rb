@@ -8,7 +8,9 @@ class ExceptionsBase < Base
   include Setup::Store
 
   def call
-    logger.info("#{unknown_from_exception} does not exist, running the command with #{corrected_word} assuming is what you meant. 🤓".blue.on_red.blink)
+    logger.info("`#{unknown_from_exception}` not working, running:".colorize(color: :green, mode: :bold))
+    logger.info(corrected_cmd.to_s.colorize(color: :green, mode: :bold))
+
     pry.eval(corrected_cmd)
   end
 
