@@ -11,11 +11,11 @@ RSpec.describe Exceptions::ActiveRecord::StatementInvalid do
   let(:exception) { ActiveRecord::StatementInvalid.new("PG::UndefinedTable: ERROR:  missing FROM-clause entry for table \"paychck\"\nLINE 1: ...\" = \"paychecks\".\"paycheck_id\" WHERE \"paych...\n                                                             ^\n") }
   let(:last_cmd) { "User.joins(:paycheck).where(paychck: {month: \"june\"}).last" }
   let(:corrected_cmd) { "User.joins(:paycheck).where(paycheck: {month: \"june\"}).last" }
-  let(:store_path) { "./spec/support/cyrano_dictionary_test.pstore" }
+  let(:store_path) { "./spec/support/byetypo_dictionary_test.pstore" }
 
   describe "#call" do
     before do
-      ENV["CYRANO_STORE_PATH"] = store_path
+      ENV["BYETYPO_STORE_PATH"] = store_path
       PStore.new(store_path).transaction do |store|
         store["associations"] = ["user", "users", "paycheck", "paychecks"]
       end

@@ -11,11 +11,11 @@ RSpec.describe Exceptions::ActiveRecord::ConfigurationError do
   let(:exception) { ActiveRecord::ConfigurationError.new("Can't join 'User' to association named 'paychecks'; perhaps you misspelled it?") }
   let(:last_cmd) { "User.joins(:paychecks).where(paycheck: {month: \"june\"}).last" }
   let(:corrected_cmd) { "User.joins(:paycheck).where(paycheck: {month: \"june\"}).last" }
-  let(:store_path) { "./spec/support/cyrano_dictionary_test.pstore" }
+  let(:store_path) { "./spec/support/byetypo_dictionary_test.pstore" }
 
   describe "#call" do
     before do
-      ENV["CYRANO_STORE_PATH"] = store_path
+      ENV["BYETYPO_STORE_PATH"] = store_path
       PStore.new(store_path).transaction do |store|
         store["associations"] = ["user", "users", "paycheck", "paychecks"]
       end

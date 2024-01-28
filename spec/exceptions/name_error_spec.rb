@@ -11,11 +11,11 @@ RSpec.describe Exceptions::NameError do
   let(:exception) { NameError.new("uninitialized constant Use") }
   let(:last_cmd) { "Use.last" }
   let(:corrected_cmd) { "User.last" }
-  let(:store_path) { "./spec/support/cyrano_dictionary_test.pstore" }
+  let(:store_path) { "./spec/support/byetypo_dictionary_test.pstore" }
 
   describe "#call" do
     before do
-      ENV["CYRANO_STORE_PATH"] = store_path
+      ENV["BYETYPO_STORE_PATH"] = store_path
       PStore.new(store_path).transaction do |store|
         store["active_record_models"] = ["User", "Paycheck"]
       end

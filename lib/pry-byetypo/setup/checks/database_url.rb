@@ -4,18 +4,18 @@ require_relative "base"
 
 module Setup
   module Checks
-    class DatabasePool < Base
+    class DatabaseUrl < Base
       class << self
         def name
-          "pool"
+          "url"
         end
 
         def variable
-          "DATABASE_POOL"
+          "DATABASE_URL"
         end
 
         def missing_variable_msg
-          "[PRY-CYRANO] ENV[\"DATABASE_POOL\"] is empty. Please assign a value to it to enable the functionality of pry-cyrano."
+          "[PRY-BYETYPO] ENV[\"DATABASE_URL\"] is empty. Please assign a value to it to enable the functionality of pry-byetypo."
         end
       end
     end

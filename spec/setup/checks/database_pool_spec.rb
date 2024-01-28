@@ -20,7 +20,7 @@ RSpec.describe Setup::Checks::DatabasePool do
       let(:database_pool) { nil }
 
       it "logs a message with a warn severity" do
-        expect(logger).to receive(:warn).with("[PRY-CYRANO] ENV[\"DATABASE_POOL\"] is empty. Please assign a value to it to enable the functionality of pry-cyrano.")
+        expect(logger).to receive(:warn).with("[PRY-BYETYPO] ENV[\"DATABASE_POOL\"] is empty. Please assign a value to it to enable the functionality of pry-byetypo.")
 
         subject
       end
