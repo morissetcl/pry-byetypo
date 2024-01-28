@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require_relative "lib/pry-cyrano/version"
+require_relative "lib/pry-byetypo/version"
 
 Gem::Specification.new do |gem|
-  gem.name = "pry-cyrano"
-  gem.version = Pry::Cyrano::VERSION
+  gem.name = "pry-byetypo"
+  gem.version = Pry::Byetypo::VERSION
   gem.authors = ["morissetcl"]
   gem.email = ["morissetcl87@gmail.com"]
 
   gem.summary = "Autocorrects typos in your Pry console"
   gem.description = "This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information."
-  gem.homepage = "https://github.com/morissetcl/pry-cyrano"
+  gem.homepage = "https://github.com/morissetcl/pry-byetypo"
   gem.license = "MIT"
   gem.required_ruby_version = ">= 2.6.0"
 
   gem.metadata["homepage_uri"] = gem.homepage
-  gem.metadata["source_code_uri"] = "https://github.com/morissetcl/pry-cyrano"
-  gem.metadata["changelog_uri"] = "https://github.com/morissetcl/pry-cyrano/blob/master/CHANGELOG.md"
+  gem.metadata["source_code_uri"] = "https://github.com/morissetcl/pry-byetypo"
+  gem.metadata["changelog_uri"] = "https://github.com/morissetcl/pry-byetypo/blob/master/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

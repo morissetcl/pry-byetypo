@@ -1,4 +1,4 @@
-# PRY-CYRANO
+# PRY-BYETYPO
 
 Autocorrects typos in your Pry console.
 
@@ -28,32 +28,32 @@ I, [2024-01-13T20:00:16.281237 #694]  INFO -- : 🤓  running User.last 🤓
 Install the gem and add to the application's Gemfile, under the `development` group, by executing:
 
 ```
-bundle add pry-cyrano
+bundle add pry-byetypo
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```
-gem install pry-cyrano
+gem install pry-byetypo
 ```
 
 ## Usage
 
 1. Open a PRY console.
 2. Start your daily work.
-3. Let `pry-cyrano` remove frictions. 🚀
+3. Let `pry-byetypo` remove frictions. 🚀
 
 ## Under the hood
 
-### 1. Cyrano dictionary
+### 1. Byetypo dictionary
 
-When you open a new Pry console, the gem will generate a `cyrano_dictionary.pstore` file containing three pieces of information:
+When you open a new Pry console, the gem will generate a `byetypo_dictionary.pstore` file containing three pieces of information:
 
 - A list of the ActiveRecord models in your application (e.g. `User`, `Account`).
 - A list of the ActiveRecord associations in your application (e.g. `user`, `users`, `account`, `accounts`).
-- A timestamp representing the last time the `cyrano_dictionary` was updated. (by default updated every week).
+- A timestamp representing the last time the `byetypo_dictionary` was updated. (by default updated every week).
 
-This file is generated at the root of your application by default. If you want to update its location, you can configure the path by adding a `CYRANO_STORE_PATH` entry in your `.env` file.
+This file is generated at the root of your application by default. If you want to update its location, you can configure the path by adding a `BYETYPO_STORE_PATH` entry in your `.env` file.
 
 ### 2. Captured exceptions
 
@@ -80,7 +80,7 @@ eg:
 ActiveRecord::ConfigurationError: Can't join 'User' to association named 'group'; perhaps you misspelled it?
 ```
 
-This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+This plugin will look into the `byetypo_dictionary` file to find the closest match and run the correct query.
 
 
 ```ruby
@@ -101,7 +101,7 @@ ActiveRecord::StatementInvalid: PG::UndefinedTable: ERROR:  missing FROM-clause 
 LINE 1: ..."group_id" WHERE "users"."deleted_at" IS NULL AND "grous"."n...
 ```
 
-This plugin will look into the `cyrano_dictionary` file to find the closest match and run the correct query.
+This plugin will look into the `byetypo_dictionary` file to find the closest match and run the correct query.
 
 ```ruby
 1] pry(main)> User.joins(:groups).where(grous: { name: "Landlord" }).last
@@ -112,7 +112,7 @@ I, [2024-01-14T23:50:49.273177 #1248]  INFO -- : User.joins(:groups).where(group
 
 ## Troubleshooting
 
-Pry-cyrano is linked to your development database. During initialization, it will attempt to establish a connection to retrieve the tables available in your project. It will fetch the information for the development environment from the `database.yml` file.
+Pry-byetypo is linked to your development database. During initialization, it will attempt to establish a connection to retrieve the tables available in your project. It will fetch the information for the development environment from the `database.yml` file.
 
 ### Unreadable database URL (URI::InvalidURIError)
 
@@ -130,7 +130,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/pry-cyrano. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/pry-cyrano/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/pry-byetypo. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/pry-byetypo/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -138,4 +138,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Pry::Cyrano project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/pry-cyrano/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Pry::Byetypo project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/pry-byetypo/blob/master/CODE_OF_CONDUCT.md).

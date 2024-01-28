@@ -3,11 +3,11 @@
 require "pry"
 require "zeitwerk"
 
-require_relative "pry-cyrano/version"
-require_relative "pry-cyrano/setup/application_dictionary"
-require_relative "pry-cyrano/exceptions_handler"
+require_relative "pry-byetypo/version"
+require_relative "pry-byetypo/setup/application_dictionary"
+require_relative "pry-byetypo/exceptions_handler"
 
-module Pry::Cyrano
+module Pry::Byetypo
   Pry.config.hooks.add_hook(:before_session, :eager_loading) do |output, exception, pry|
     Setup::ApplicationDictionary.new
   end

@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in pry-cyrano.gemspec
+# Specify your gem's dependencies in pry-byetypo.gemspec
 gemspec
 
 gem "rake", "~> 13.0"

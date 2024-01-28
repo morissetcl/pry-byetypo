@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "pry-cyrano"
+require "pry-byetypo"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
