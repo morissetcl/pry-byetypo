@@ -4,7 +4,9 @@ Autocorrects typos in your Pry console.
 
 This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
 
-So far, this plugin is not framework agnostic, and it requires Rails 7 or later.
+> [!NOTE]
+> So far, this plugin is not framework agnostic, and it requires Rails 7 or later.
+
 
 #### Before
 
