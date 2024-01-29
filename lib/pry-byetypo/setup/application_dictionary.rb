@@ -28,6 +28,7 @@ module Setup
 
     def populate_store
       store.transaction do
+        # Create a table with the uniq binding identifier information to store variable history per session.
         store[binding.to_s] = []
         store.commit unless staled_store?
 
