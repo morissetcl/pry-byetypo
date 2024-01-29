@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pry-byetypo (1.0.1)
+    pry-byetypo (1.0.2)
       colorize (~> 1.1.0)
       pry (>= 0.13, < 0.15)
       rails (~> 7.0)
