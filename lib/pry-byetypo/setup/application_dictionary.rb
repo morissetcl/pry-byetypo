@@ -3,25 +3,34 @@
 require_relative "checks/database_url"
 require_relative "checks/database_pool"
 require_relative "store"
+require_relative "../base"
 
 require "pstore"
 
 module Setup
-  class ApplicationDictionary
+  class ApplicationDictionary < Base
     include Store
 
-    def initialize
+    def initialize(binding)
+      @binding = binding
+    end
+
+    def call
       establish_db_connection
       populate_store
     end
 
     private
 
+    attr_reader :binding
+
     SEVEN_DAYS = 604800
 
     def populate_store
       store.transaction do
-        store.abort unless staled_store?
+        # Create a table with the uniq binding identifier information to store variable history per session.
+        store[binding.to_s] = []
+        store.commit unless staled_store?
 
         store["active_record_models"] = populate_active_record_models_dictionary
         store["associations"] = populate_associations
