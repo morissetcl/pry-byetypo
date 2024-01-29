@@ -12,5 +12,5 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-  config.before(:suite) { ENV["BYETYPO_STORE_PATH"] = "support/byetypo_dictionary_test.pstore" }
+  config.before(:suite) { ENV["BYETYPO_STORE_PATH"] = "./spec/support/byetypo_dictionary_test.pstore" }
 end
