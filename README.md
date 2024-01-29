@@ -4,10 +4,6 @@ Autocorrects typos in your Pry console.
 
 This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information.
 
-> [!NOTE]
-> So far, this plugin is not framework agnostic, and it requires Rails 7 or later.
-
-
 #### Before
 
 ```ruby
@@ -25,6 +21,9 @@ I, [2024-01-13T20:00:16.281237 #694]  INFO -- : User.last
 2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
 => #<User id: 1, email: "yo@email.com">
 ```
+
+> [!NOTE]
+> So far, this plugin is not framework agnostic, and it requires Rails 7 or later.
 
 ## Installation
 
