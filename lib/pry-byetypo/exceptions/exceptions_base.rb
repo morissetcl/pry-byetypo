@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
+require "logger"
+require "colorize"
 require_relative "../base"
 require_relative "../setup/store"
-require "colorize"
 
 class ExceptionsBase < Base
   include Setup::Store

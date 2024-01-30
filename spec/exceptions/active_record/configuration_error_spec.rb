@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_record"
+
 RSpec.describe Exceptions::ActiveRecord::ConfigurationError do
   subject { described_class.call(output, exception, pry) }
 
@@ -13,7 +15,6 @@ RSpec.describe Exceptions::ActiveRecord::ConfigurationError do
 
   describe "#call" do
     before do
-      ENV["BYETYPO_STORE_PATH"] = store_path
       PStore.new(store_path).transaction do |store|
         store["associations"] = ["user", "users", "paycheck", "paychecks"]
       end

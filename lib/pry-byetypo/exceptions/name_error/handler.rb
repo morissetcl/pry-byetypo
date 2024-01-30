@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require_relative "../exceptions_base"
-require_relative "./uninitialized_constant"
-require_relative "./undefined_variable"
 require_relative "../../constants/errors"
+require_relative "uninitialized_constant"
+require_relative "undefined_variable"
 
 module Exceptions
   module NameError
-    class Base < ExceptionsBase
-
+    class Handler < ExceptionsBase
       attr_reader :exception, :output, :pry
 
       def initialize(output, exception, pry)
@@ -17,17 +16,19 @@ module Exceptions
         @pry = pry
       end
 
+      # FIXME: https://github.com/rubocop/rubocop-performance/issues/438
+      # rubocop:disable Performance/ConstantRegexp
       def call
-        if exception.message.include?(Constants::Errors::UNINITIALIZED_CONSTANT)
-          # In this context we only need to one including an `undefined local variable` error.
+        case exception.message
+        in /#{Constants::Errors::UNINITIALIZED_CONSTANT}/
           UninitializedConstant.call(output, exception, pry)
-        elsif exception.message.include?(Constants::Errors::UNDEFINED_VARIABLE)
-          # In this context we only need to one including an `uninitialized constant` error.
+        in /#{Constants::Errors::UNDEFINED_VARIABLE}/
           UndefinedVariable.call(output, exception, pry)
         else
           Pry::ExceptionHandler.handle_exception(output, exception, pry)
         end
       end
+      # rubocop:enable Performance/ConstantRegexp
     end
   end
 end

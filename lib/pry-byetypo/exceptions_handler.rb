@@ -3,7 +3,7 @@
 require_relative "base"
 require_relative "exceptions/active_record/statement_invalid"
 require_relative "exceptions/active_record/configuration_error"
-require_relative "exceptions/name_error/base"
+require_relative "exceptions/name_error/handler"
 require_relative "constants/errors"
 
 class ExceptionsHandler < Base
@@ -19,7 +19,7 @@ class ExceptionsHandler < Base
     case exception
     in NameError
       # NameError is a Superclass for all undefined statement.
-      Exceptions::NameError::Base.call(output, exception, pry)
+      Exceptions::NameError::Handler.call(output, exception, pry)
     in ActiveRecord::StatementInvalid
       # ActiveRecord::StatementInvalid is a Superclass for all database execution errors.
       # We only need to one including an `UndefinedTable` error.

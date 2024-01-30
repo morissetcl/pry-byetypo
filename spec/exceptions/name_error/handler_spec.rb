@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Exceptions::NameError::Base do
+RSpec.describe Exceptions::NameError::Handler do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }

@@ -11,7 +11,7 @@ RSpec.describe ExceptionsHandler do
     let(:exception) { NameError.new(Constants::Errors::UNINITIALIZED_CONSTANT) }
 
     it "calls Exceptions::NameError::Base error" do
-      expect(Exceptions::NameError::Base).to receive(:call).with(output, exception, pry)
+      expect(Exceptions::NameError::Handler).to receive(:call).with(output, exception, pry)
       subject
     end
   end

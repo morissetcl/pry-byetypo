@@ -1,21 +1,23 @@
 # frozen_string_literal: true
 
-RSpec.describe Exceptions::NameError::UninitializedConstant do
+RSpec.describe Exceptions::NameError::UndefinedVariable do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
-  let(:dictionnary) { ["User"] }
-  let(:exception) { NameError.new("uninitialized constant Use") }
-  let(:last_cmd) { "Use.last" }
-  let(:corrected_cmd) { "User.last" }
+  let(:exception) { NameError.new("undefined local variable or method `resilt' for main:Object") }
+  let(:last_cmd) { "resilt" }
+  let(:corrected_cmd) { "result" }
   let(:store_path) { "./spec/support/byetypo_dictionary_test.pstore" }
+  let(:store) { PStore.new(store_path) }
 
   describe "#call" do
     before do
+      allow(PStore).to receive(:new).and_return(store)
       PStore.new(store_path).transaction do |store|
-        store["active_record_models"] = ["User", "Paycheck"]
+        store["binding1234"] = ["result"]
       end
+      allow(pry).to receive(:current_binding).and_return("binding1234")
       allow(Pry).to receive(:line_buffer).and_return([last_cmd])
     end
 

@@ -15,7 +15,6 @@ RSpec.describe Exceptions::ActiveRecord::StatementInvalid do
 
   describe "#call" do
     before do
-      ENV["BYETYPO_STORE_PATH"] = store_path
       PStore.new(store_path).transaction do |store|
         store["associations"] = ["user", "users", "paycheck", "paychecks"]
       end
