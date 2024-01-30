@@ -13,8 +13,8 @@ RSpec.describe ExceptionsHandler do
     context "given a ActiveRecord::StatementInvalid related to uninitialized constant" do
       let(:exception) { NameError.new(ExceptionsHandler::UNINITIALIZED_CONSTANT) }
 
-      it "calls Exceptions::NameError error" do
-        expect(Exceptions::NameError).to receive(:call).with(output, exception, pry)
+      it "calls Exceptions::NameError::UninitializedConstant error" do
+        expect(Exceptions::NameError::UninitializedConstant).to receive(:call).with(output, exception, pry)
         subject
       end
     end
