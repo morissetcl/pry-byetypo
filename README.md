@@ -7,19 +7,22 @@ This small Pry plugin captures exceptions that may arise from typos and deduces 
 #### Before
 
 ```ruby
-[1] pry(main)> Usert.last
-NameError: uninitialized constant Usert
-from (pry):3:in `__pry__'
+[1] pry(main)> result = 1
+=> 1
+[2] pry(main)> resilt
+NameError: undefined local variable or method `resilt' for main:Object
+from (pry):2:in `__pry__'
 ```
 
 #### After
 
 ```ruby
-[1] pry(main)> Usert.last
-I, [2024-01-13T20:00:16.280710 #694]  ERROR -- : NameError: uninitialized constant Usert
-I, [2024-01-13T20:00:16.281237 #694]  INFO -- : Running: User.last
-2024-01-13 20:00:16.345175 D [694:9200 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL ORDER BY "users"."id" DESC LIMIT $1  [["LIMIT", 1]]
-=> #<User id: 1, email: "yo@email.com">
+[1] pry(main)> result = 1
+=> 1
+[2] pry(main)> resilt
+E, [2024-01-31T17:11:16.344161 #3739] ERROR -- : undefined local variable or method `resilt' for main:Object
+I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: result
+=> 1
 ```
 
 > [!NOTE]
