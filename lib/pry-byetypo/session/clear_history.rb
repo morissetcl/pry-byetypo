@@ -14,8 +14,8 @@ module Session
     end
 
     def call
-      binding_to_remove = pry.push_initial_binding.join
-      store.transaction { store.delete(binding_to_remove) }
+      pry_instance_to_remove = pry.push_initial_binding.join
+      store.transaction { store.delete(pry_instance_to_remove) }
     end
   end
 end

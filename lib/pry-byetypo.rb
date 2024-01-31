@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "pry"
-require "zeitwerk"
 
 require_relative "pry-byetypo/setup/application_dictionary"
 require_relative "pry-byetypo/session/clear_history"

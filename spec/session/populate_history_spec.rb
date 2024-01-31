@@ -5,18 +5,18 @@ RSpec.describe Session::PopulateHistory do
 
   let(:pry) { Pry.new }
   let(:store) { PStore.new(ENV["BYETYPO_STORE_PATH"]) }
-  let(:binding_name) { "binding1234" }
+  let(:pry_instance_uid) { "binding1234" }
 
   before do
     allow(PStore).to receive(:new).and_return(store)
-    store.transaction { store[binding_name] = [] }
-    allow(pry).to receive(:binding_stack).and_return([binding_name])
-    allow(pry).to receive(:eval_string).and_return("test\n")
+    store.transaction { store[pry_instance_uid] = [] }
+    allow(pry).to receive(:binding_stack).and_return([pry_instance_uid])
+    allow(pry).to receive(:eval_string).and_return("user = User.last")
   end
 
-  it "clears the table of the initial binding" do
-    expect(store.transaction { store[binding_name] }).to eq([])
+  it "populates the table of the current pry instance" do
+    expect(store.transaction { store[pry_instance_uid] }).to eq([])
     subject
-    expect(store.transaction { store[binding_name] }).to eq(["test"])
+    expect(store.transaction { store[pry_instance_uid] }).to eq(["user"])
   end
 end

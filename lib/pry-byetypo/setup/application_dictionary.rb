@@ -28,8 +28,8 @@ module Setup
 
     def populate_store
       store.transaction do
-        # Create a table with the uniq binding identifier information to store variable history per session.
-        store[binding.to_s] = []
+        # Create a table with unique instance identifier information to store variables history.
+        store[pry_instance_uid] = []
         store.commit unless staled_store?
 
         store["active_record_models"] = populate_active_record_models_dictionary
@@ -73,6 +73,11 @@ module Setup
       return true if store["synced_at"].nil?
 
       (store["synced_at"] + SEVEN_DAYS) <= Time.now
+    end
+
+    # Use the binding identifier as pry instance uid.
+    def pry_instance_uid
+      binding.to_s
     end
 
     def logger

@@ -5,10 +5,9 @@
 /doc/
 /pkg/
 /spec/reports/
+/spec/support/byetypo_dictionary_test.pstore
 /tmp/
 
 # rspec failure tracking
 .rspec_status
 .byebug_history
-
-byetypo_dictionary_test.pstore

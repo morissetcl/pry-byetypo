@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
+require "logger"
+require "colorize"
 require_relative "../base"
 require_relative "../setup/store"
-require "colorize"
 
 class ExceptionsBase < Base
   include Setup::Store
 
   def call
-    logger.error(exception.to_s.colorize(color: :light_red, mode: :bold))
-    logger.info("Running: #{corrected_cmd}".colorize(color: :green, mode: :bold))
+    if corrected_word
+      logger.error(exception.to_s.colorize(color: :light_red, mode: :bold))
+      logger.info("Running: #{corrected_cmd}".colorize(color: :green, mode: :bold))
 
-    pry.eval(corrected_cmd)
+      pry.eval(corrected_cmd)
+    else
+      Pry::ExceptionHandler.handle_exception(output, exception, pry)
+    end
   end
 
   private
