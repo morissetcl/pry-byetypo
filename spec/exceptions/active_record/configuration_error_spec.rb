@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "active_record"
-
 RSpec.describe Exceptions::ActiveRecord::ConfigurationError do
   subject { described_class.call(output, exception, pry) }
 

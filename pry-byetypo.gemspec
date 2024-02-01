@@ -5,14 +5,14 @@ require_relative "lib/pry-byetypo/version"
 Gem::Specification.new do |gem|
   gem.name = "pry-byetypo"
   gem.version = Pry::Byetypo::VERSION
-  gem.authors = ["morissetcl"]
+  gem.authors = ["Clément Morisset"]
   gem.email = ["morissetcl87@gmail.com"]
 
   gem.summary = "Autocorrects typos in your Pry console"
-  gem.description = "This small Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information."
+  gem.description = "This Pry plugin captures exceptions that could be due to typos and deduces the correct command based on your database information."
   gem.homepage = "https://github.com/morissetcl/pry-byetypo"
   gem.license = "MIT"
-  gem.required_ruby_version = ">= 2.6.0"
+  gem.required_ruby_version = ">= 2.7.0"
 
   gem.metadata["homepage_uri"] = gem.homepage
   gem.metadata["source_code_uri"] = "https://github.com/morissetcl/pry-byetypo"
@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.bindir = "exe"
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   gem.require_paths = ["lib"]
+  gem.add_development_dependency "rails", "~> 7.0"
   gem.add_runtime_dependency "colorize", "~> 1.1.0"
   gem.add_runtime_dependency "pry", ">= 0.13", "< 0.15"
-  gem.add_runtime_dependency "rails", "~> 7.0"
 end
