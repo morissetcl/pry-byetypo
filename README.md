@@ -26,7 +26,7 @@ I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: result
 ```
 
 > [!NOTE]
-> So far, this plugin is not framework agnostic, and it requires Rails 7 or later.
+> At present, this plugin is not ORM-agnostic; instead, it specifically requires ActiveRecord.
 
 ## Installation
 
