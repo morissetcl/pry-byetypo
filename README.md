@@ -1,4 +1,4 @@
-# PRY-BYETYPO
+# PRY-BYETYPO 👋
 
 Autocorrects typos in your Pry console.
 
