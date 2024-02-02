@@ -11,12 +11,12 @@ RSpec.describe Session::PopulateHistory do
     allow(PStore).to receive(:new).and_return(store)
     store.transaction { store[pry_instance_uid] = [] }
     allow(pry).to receive(:binding_stack).and_return([pry_instance_uid])
-    allow(pry).to receive(:eval_string).and_return("user = User.last")
+    allow(pry).to receive(:eval_string).and_return("user_last, user_first = User.last, User,first")
   end
 
   it "populates the table of the current pry instance" do
     expect(store.transaction { store[pry_instance_uid] }).to eq([])
     subject
-    expect(store.transaction { store[pry_instance_uid] }).to eq(["user"])
+    expect(store.transaction { store[pry_instance_uid] }).to eq(["user_last", "user_first"])
   end
 end

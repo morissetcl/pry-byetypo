@@ -15,9 +15,9 @@ module Session
 
     def call
       store.transaction do
-        store.abort unless extract_variable_to_store
+        store.abort unless variables_to_store
 
-        store[pry_instance_uid].push(variable_to_store)
+        store[pry_instance_uid].push(*variables_to_store)
       end
     end
 
@@ -28,16 +28,12 @@ module Session
       binding.binding_stack.join
     end
 
-    def extract_variable_to_store
-      @extract_variable_to_store ||= last_cmd.match(/^(\w+)\s*=/)
+    def variables_to_store
+      @variables_to_store ||= last_cmd.split("=").first.strip.split(", ")
     end
 
     def last_cmd
       binding.eval_string.strip
-    end
-
-    def variable_to_store
-      extract_variable_to_store[1]
     end
   end
 end
