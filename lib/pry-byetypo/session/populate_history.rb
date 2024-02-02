@@ -14,6 +14,8 @@ module Session
     end
 
     def call
+      return unless is_assignement_variables?
+
       store.transaction do
         store.abort unless variables_to_store
 
@@ -29,11 +31,27 @@ module Session
     end
 
     def variables_to_store
-      @variables_to_store ||= last_cmd.split("=").first.strip.split(", ")
+      @variables_to_store ||= last_cmd.split("=").first.strip.split(",")
     end
 
     def last_cmd
       binding.eval_string.strip
+    end
+
+    # Returns true if the last command seems to be an assignment of variables, false otherwise.
+    #
+    # Examples
+    #
+    #   is_assignment_variables?("user_last, user_first = User.last, User.first")
+    #   # => true
+    #
+    #   is_assignment_variables?("user_last = User.last")
+    #   # => true
+    #
+    #   is_assignment_variables?("user_last")
+    #   # => false
+    def is_assignement_variables?
+      last_cmd.include?("=")
     end
   end
 end
