@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Exceptions::NameError::UninitializedConstant do
+RSpec.describe Exceptions::ActiveRecord::UninitializedConstant do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }

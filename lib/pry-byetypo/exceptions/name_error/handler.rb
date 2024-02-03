@@ -2,7 +2,7 @@
 
 require_relative "../exceptions_base"
 require_relative "../../constants/errors"
-require_relative "uninitialized_constant"
+require_relative "../active_record/uninitialized_constant"
 require_relative "undefined_variable"
 
 module Exceptions
@@ -21,7 +21,7 @@ module Exceptions
       def call
         case exception.message
         in /#{Constants::Errors::UNINITIALIZED_CONSTANT}/
-          UninitializedConstant.call(output, exception, pry)
+          ActiveRecord::UninitializedConstant.call(output, exception, pry)
         in /#{Constants::Errors::UNDEFINED_VARIABLE}/
           UndefinedVariable.call(output, exception, pry)
         else
