@@ -14,10 +14,12 @@ module Session
     end
 
     def call
-      store.transaction do
-        store.abort unless extract_variable_to_store
+      return unless is_assignement_variables?
 
-        store[pry_instance_uid].push(variable_to_store)
+      store.transaction do
+        store.abort unless variables_to_store
+
+        store[pry_instance_uid].push(*variables_to_store)
       end
     end
 
@@ -28,16 +30,28 @@ module Session
       binding.binding_stack.join
     end
 
-    def extract_variable_to_store
-      @extract_variable_to_store ||= last_cmd.match(/^(\w+)\s*=/)
+    def variables_to_store
+      @variables_to_store ||= last_cmd.split("=").first.strip.split(",")
     end
 
     def last_cmd
       binding.eval_string.strip
     end
 
-    def variable_to_store
-      extract_variable_to_store[1]
+    # Returns true if the last command seems to be an assignment of variables, false otherwise.
+    #
+    # Examples
+    #
+    #   is_assignment_variables?("user_last, user_first = User.last, User.first")
+    #   # => true
+    #
+    #   is_assignment_variables?("user_last = User.last")
+    #   # => true
+    #
+    #   is_assignment_variables?("user_last")
+    #   # => false
+    def is_assignement_variables?
+      last_cmd.include?("=")
     end
   end
 end
