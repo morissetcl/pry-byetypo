@@ -45,7 +45,7 @@ module Setup
 
     def populate_active_record_models_dictionary
       Zeitwerk::Loader.eager_load_all
-      ActiveRecord::Base.descendants.map { |model| model.name }
+      ActiveRecord::Base.descendants.map { |model| format_active_record_model(model) }.flatten
     end
 
     def populate_associations
@@ -65,6 +65,16 @@ module Setup
 
     def development_database_config
       @development_database_config ||= database_config["development"]
+    end
+
+    # This method takes an ActiveRecord model as an argument and formats its name and module information.
+    # If the model is within a module namespace, it returns an array containing the model's name and an array of its modules.
+    # If the model is not within a module, it returns just the model's name as a string.
+    def format_active_record_model(model)
+      modules = model.name.split("::")
+      return model.name, modules if modules.count > 1
+
+      model.name
     end
 
     # By default we update the store every week.
