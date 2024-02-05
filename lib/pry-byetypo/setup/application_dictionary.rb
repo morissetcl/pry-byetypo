@@ -60,7 +60,7 @@ module Setup
     end
 
     def database_config
-      YAML.safe_load(File.read("./config/database.yml"), aliases: true)
+      YAML.safe_load(File.read(database_config_path), aliases: true)
     end
 
     def development_database_config
@@ -92,6 +92,10 @@ module Setup
 
     def logger
       @logger = Logger.new($stdout)
+    end
+
+    def database_config_path
+      ENV["DB_CONFIG_PATH"] || "./config/database.yml"
     end
   end
 end

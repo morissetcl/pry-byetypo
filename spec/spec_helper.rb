@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "pry-byetypo"
-require "active_record"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -13,5 +12,8 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-  config.before(:suite) { ENV["BYETYPO_STORE_PATH"] = "./spec/support/byetypo_dictionary_test.pstore" }
+  config.before(:suite) do
+    ENV["BYETYPO_STORE_PATH"] = "./spec/support/byetypo_dictionary_test.pstore"
+    ENV["DB_CONFIG_PATH"] = "spec/support/config/database.yml"
+  end
 end
