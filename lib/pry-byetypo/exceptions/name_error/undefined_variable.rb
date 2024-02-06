@@ -7,10 +7,6 @@ module Exceptions
     class UndefinedVariable < ExceptionsBase
       private
 
-      def corrected_word
-        @corrected_word ||= spell_checker(session_dictionary).correct(unknown_from_exception).first
-      end
-
       def corrected_cmd
         @corrected_cmd ||= last_cmd.gsub(/\b#{unknown_from_exception}\b/, corrected_word)
       end
@@ -19,7 +15,7 @@ module Exceptions
         exception.to_s.match(exception_regexp)[1]
       end
 
-      def session_dictionary
+      def dictionary
         @session_dictionary ||= store.transaction { |s| s[pry_instance_uid] }
       end
 

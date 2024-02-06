@@ -29,6 +29,10 @@ class ExceptionsBase < Base
     @pry = pry
   end
 
+  def corrected_word
+    @corrected_word ||= spell_checker(dictionary).correct(unknown_from_exception).first
+  end
+
   def spell_checker(dictionary)
     DidYouMean::SpellChecker.new(dictionary: dictionary)
   end
