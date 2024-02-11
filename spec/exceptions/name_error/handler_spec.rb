@@ -12,7 +12,7 @@ RSpec.describe Exceptions::NameError::Handler do
       let(:exception) { NameError.new("uninitialized constant Use") }
 
       it "calls Exceptions::NameError::UninitializedConstant" do
-        expect(Exceptions::NameError::UninitializedConstant).to receive(:call).with(output, exception, pry)
+        expect(Exceptions::ActiveRecord::UninitializedConstant).to receive(:call).with(output, exception, pry)
         subject
       end
     end
