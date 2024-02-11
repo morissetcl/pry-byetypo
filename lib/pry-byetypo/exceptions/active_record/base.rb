@@ -16,7 +16,7 @@ module Exceptions
       end
 
       def dictionary
-        @associations_dictionary ||= store.transaction { |s| s["associations"] }
+        store.transaction { |s| s["associations"] }
       end
     end
   end

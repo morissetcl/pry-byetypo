@@ -16,7 +16,7 @@ module Exceptions
       end
 
       def dictionary
-        @session_dictionary ||= store.transaction { |s| s[pry_instance_uid] }
+        store.transaction { |s| s[pry_instance_uid] }
       end
 
       def exception_regexp
