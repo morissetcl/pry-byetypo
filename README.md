@@ -26,7 +26,7 @@ I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: result
 ```
 
 > [!NOTE]
-> At present, this plugin is not ORM-agnostic; instead, it specifically requires ActiveRecord.
+> Currently, this plugin is not truly ORM-agnostic; to fully benefit from it, ActiveRecord is required.
 
 ## Installation
 
