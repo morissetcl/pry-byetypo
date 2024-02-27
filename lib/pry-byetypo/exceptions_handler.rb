@@ -4,6 +4,7 @@ require_relative "base"
 require_relative "exceptions/active_record/statement_invalid"
 require_relative "exceptions/active_record/configuration_error"
 require_relative "exceptions/name_error/handler"
+require_relative "exceptions/no_method_error"
 require_relative "constants/errors"
 
 class ExceptionsHandler < Base
@@ -17,6 +18,8 @@ class ExceptionsHandler < Base
 
   def call
     case exception
+    in NoMethodError
+      Exceptions::NoMethodError.call(output, exception, pry)
     in NameError
       # NameError is a Superclass for all undefined statement.
       Exceptions::NameError::Handler.call(output, exception, pry)
