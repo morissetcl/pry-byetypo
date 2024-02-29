@@ -87,6 +87,27 @@ I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: result
 => 1
 ```
 
+### NoMethodError - undefined method
+
+This error occurs when you mispelled a method in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected method.
+
+##### Before
+
+```ruby
+[1] pry(main)> User.lasst
+NoMethodError: undefined method `lasst' for User:Class
+from (pry):2:in `__pry__'
+```
+
+##### After
+
+```ruby
+[1] pry(main)> User.lasst
+E, [2024-01-31T17:11:16.344161 #3739] ERROR -- : undefined method `lasst' for User:Class
+I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: User.last
+=> #<User id: 1, email: "yo@email.com">
+```
+
 ### NameError - uninitialized constant
 
 This error occurs when you mispelled a model in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected model.
