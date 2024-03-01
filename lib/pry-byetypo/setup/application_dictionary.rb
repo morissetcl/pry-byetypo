@@ -15,6 +15,7 @@ module Setup
 
     def call
       Setup::Dictionary::ActiveRecord.initialize! if defined?(ActiveRecord)
+    ensure
       populate_store
     end
 
