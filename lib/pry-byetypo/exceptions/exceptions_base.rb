@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "logger"
-require "colorize"
 require_relative "../base"
 require_relative "../setup/store"
 
@@ -10,8 +9,8 @@ class ExceptionsBase < Base
 
   def call
     if corrected_word
-      logger.error(exception.to_s.colorize(color: :light_red, mode: :bold))
-      logger.info("Running: #{corrected_cmd}".colorize(color: :green, mode: :bold))
+      logger.error("\e[1;31m#{exception}\e[0m")
+      logger.info("\e[1;32mRunning: #{corrected_cmd}\e[0m")
 
       pry.eval(corrected_cmd)
     else
