@@ -32,5 +32,15 @@ RSpec.describe Exceptions::NoMethodError do
         subject
       end
     end
+
+    context "given an undefined method error not linked to a REPL typo" do
+      let(:last_cmd) { "UserAccount.perform(user)" }
+      let(:exception) { NoMethodError.new("undefined method `is_loaded?' for Account") }
+
+      it "does not try to correct the last command" do
+        expect(Pry::ExceptionHandler).to receive(:handle_exception)
+        subject
+      end
+    end
   end
 end

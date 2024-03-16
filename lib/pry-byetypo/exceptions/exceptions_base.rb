@@ -29,7 +29,11 @@ class ExceptionsBase < Base
   end
 
   def can_correct?
-    dictionary && corrected_word
+    error_from_typo? && dictionary && corrected_word
+  end
+
+  def error_from_typo?
+    last_cmd.include?(unknown_from_exception)
   end
 
   def corrected_word
