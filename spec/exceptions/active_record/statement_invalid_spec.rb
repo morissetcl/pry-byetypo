@@ -7,7 +7,6 @@ RSpec.describe Exceptions::ActiveRecord::StatementInvalid do
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
-  let(:dictionnary) { ["paychecks", "paycheck"] }
   let(:exception) { ActiveRecord::StatementInvalid.new("PG::UndefinedTable: ERROR:  missing FROM-clause entry for table \"paychck\"\nLINE 1: ...\" = \"paychecks\".\"paycheck_id\" WHERE \"paych...\n                                                             ^\n") }
   let(:last_cmd) { "User.joins(:paycheck).where(paychck: {month: \"june\"}).last" }
   let(:corrected_cmd) { "User.joins(:paycheck).where(paycheck: {month: \"june\"}).last" }
