@@ -8,7 +8,7 @@ class ExceptionsBase < Base
   include Setup::Store
 
   def call
-    if corrected_word
+    if can_correct?
       logger.error("\e[1;31m#{exception}\e[0m")
       logger.info("\e[1;32mRunning: #{corrected_cmd}\e[0m")
 
@@ -26,6 +26,10 @@ class ExceptionsBase < Base
     @output = output
     @exception = exception
     @pry = pry
+  end
+
+  def can_correct?
+    dictionary && corrected_word
   end
 
   def corrected_word

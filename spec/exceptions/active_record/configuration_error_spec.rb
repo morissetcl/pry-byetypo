@@ -5,7 +5,6 @@ RSpec.describe Exceptions::ActiveRecord::ConfigurationError do
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
-  let(:dictionnary) { ["paychecks", "paycheck"] }
   let(:exception) { ActiveRecord::ConfigurationError.new("Can't join 'User' to association named 'paychecks'; perhaps you misspelled it?") }
   let(:last_cmd) { "User.joins(:paychecks).where(paycheck: {month: \"june\"}).last" }
   let(:corrected_cmd) { "User.joins(:paycheck).where(paycheck: {month: \"june\"}).last" }
