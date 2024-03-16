@@ -15,7 +15,7 @@ module Exceptions
     end
 
     def dictionary
-      eval(klass).methods.map(&:to_s) # rubocop:disable Security/Eval
+      eval(infer_klass).methods.map(&:to_s) # rubocop:disable Security/Eval
     end
 
     def exception_regexp
@@ -23,7 +23,17 @@ module Exceptions
     end
 
     def klass
-      exception.to_s.match(/for\s+(.*?):\w*$/)[1]
+      exception_without_class_module = exception.to_s.gsub(":Class", "")
+      exception_without_class_module.split.last
+    end
+
+    # [].methods and Array.methods have a different output.
+    # Array class is a part of the Ruby core library while `[]` is an instance of the Array class.
+    # When calling [].methods, we inspect the methods available to instances of the Array class, including those inherited from its class and ancestors.
+    def infer_klass
+      return klass if klass != "Array"
+
+      "[]"
     end
   end
 end
