@@ -17,22 +17,11 @@ RSpec.describe ExceptionsHandler do
   end
 
   context "given a ActiveRecord::StatementInvalid error" do
-    context "given a ActiveRecord::StatementInvalid related to undefined table" do
-      let(:exception) { ActiveRecord::StatementInvalid.new(Constants::Errors::UNDEFINED_TABLE) }
+    let(:exception) { ActiveRecord::StatementInvalid.new(Constants::Errors::UNDEFINED_TABLE) }
 
-      it "calls Exceptions::ActiveRecord::StatementInvalid" do
-        expect(Exceptions::ActiveRecord::StatementInvalid).to receive(:call).with(output, exception, pry)
-        subject
-      end
-    end
-
-    context "given a ActiveRecord::StatementInvalid not related to undefined table" do
-      let(:exception) { ActiveRecord::StatementInvalid.new }
-
-      it "calls Pry::ExceptionHandler" do
-        expect(Pry::ExceptionHandler).to receive(:handle_exception)
-        subject
-      end
+    it "calls Exceptions::ActiveRecord::StatementInvalid" do
+      expect(Exceptions::ActiveRecord::StatementInvalid::Handler).to receive(:call).with(output, exception, pry)
+      subject
     end
   end
 
