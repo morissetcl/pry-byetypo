@@ -2,7 +2,7 @@
 
 require "active_record"
 
-RSpec.describe Exceptions::ActiveRecord::StatementInvalid do
+RSpec.describe Exceptions::ActiveRecord::StatementInvalid::UndefinedTable do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
