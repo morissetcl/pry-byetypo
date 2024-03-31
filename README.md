@@ -87,6 +87,28 @@ I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: result
 => 1
 ```
 
+### NameError - uninitialized constant
+
+This error occurs when you mispelled a model in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected model.
+
+##### Before
+
+```ruby
+[2] pry(main)> Usert.last
+NameError: uninitialized constant Usert
+from (pry):2:in `__pry__'
+[3] pry(main)>
+```
+
+##### After
+
+```ruby
+[1] pry(main)> Usert.last
+I, [2024-01-13T20:00:16.280710 #694]  ERROR -- : uninitialized constant Usert
+I, [2024-01-13T20:00:16.281237 #694]  INFO -- : Running: User.last
+=> #<User id: 1, email: "yo@email.com">
+```
+
 ### NoMethodError - undefined method
 
 This error occurs when you mispelled a method in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected method.
@@ -108,26 +130,32 @@ I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: User.last
 => #<User id: 1, email: "yo@email.com">
 ```
 
-### NameError - uninitialized constant
+### UndefinedColumn
 
-This error occurs when you mispelled a model in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected model.
+This error occurs when you mispelled a column in your REPL. The gem will catch that exception and will try find the closest matches. If so, it will run the command with the (potential) corrected column.
 
 ##### Before
 
 ```ruby
-[2] pry(main)> Usert.last
-NameError: uninitialized constant Usert
-from (pry):2:in `__pry__'
-[3] pry(main)>
+[2] pry(main)> User.find_by(emil: "yo@email.com")
+E, [2024-03-31T00:14:12.907708 #11761] ERROR -- : PG::UndefinedColumn: ERROR:  column users.emil does not exist
+LINE 1: ...OM "users" WHERE "users"."deleted_at" IS NULL AND "users"."e...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.email".
 ```
 
 ##### After
 
 ```ruby
-[1] pry(main)> Usert.last
-I, [2024-01-13T20:00:16.280710 #694]  ERROR -- : uninitialized constant Usert
-I, [2024-01-13T20:00:16.281237 #694]  INFO -- : Running: User.last
-=> #<User id: 1, email: "yo@email.com">
+[1] pry(main)> User.find_by(emil: "yo@email.com")
+E, [2024-03-31T00:14:12.907708 #11761] ERROR -- : PG::UndefinedColumn: ERROR:  column users.emil does not exist
+LINE 1: ...OM "users" WHERE "users"."deleted_at" IS NULL AND "users"."e...
+                                                             ^
+HINT:  Perhaps you meant to reference the column "users.email".
+
+I, [2024-03-31T00:14:12.908257 #11761]  INFO -- : Running: User.find_by(email: "yo@email.com")
+2024-03-31 00:14:12.915906 D [11761:9180 log_subscriber.rb:130] ActiveRecord::Base --   User Load (1.0ms)  SELECT "users".* FROM "users" WHERE "users"."deleted_at" IS NULL AND "users"."email" = $1 LIMIT $2  [["email", "yo@email.com"], ["LIMIT", 1]]
+=> #<User id: 1, email: "yo@email.com", ...>
 ```
 
 ### ActiveRecord::ConfigurationError
