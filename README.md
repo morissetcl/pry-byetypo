@@ -4,27 +4,6 @@ Autocorrects typos in your Pry console.
 
 This small Pry plugin captures exceptions that may arise from typos and deduces the correct command based on your database information and session history.
 
-#### Before
-
-```ruby
-[1] pry(main)> result = 1
-=> 1
-[2] pry(main)> resilt
-NameError: undefined local variable or method `resilt' for main:Object
-from (pry):2:in `__pry__'
-```
-
-#### After
-
-```ruby
-[1] pry(main)> result = 1
-=> 1
-[2] pry(main)> resilt
-E, [2024-01-31T17:11:16.344161 #3739] ERROR -- : undefined local variable or method `resilt' for main:Object
-I, [2024-01-31T17:11:16.344503 #3739]  INFO -- : Running: result
-=> 1
-```
-
 > [!NOTE]
 > Currently, this plugin is not truly ORM-agnostic; to fully benefit from it, ActiveRecord is required.
 
