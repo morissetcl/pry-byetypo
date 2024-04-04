@@ -7,7 +7,7 @@ require_relative "undefined_column"
 
 module Exceptions
   module ActiveRecord
-    module StatementInvalid
+    module Postgresql
       class Handler < ExceptionsBase
         attr_reader :exception, :output, :pry
 

@@ -4,7 +4,7 @@ require_relative "../base"
 
 module Exceptions
   module ActiveRecord
-    module StatementInvalid
+    module Postgresql
       class UndefinedColumn < Base
         private
 
