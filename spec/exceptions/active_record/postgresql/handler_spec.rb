@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Exceptions::ActiveRecord::StatementInvalid::Handler do
+
+RSpec.describe Exceptions::ActiveRecord::Postgresql::Handler do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }

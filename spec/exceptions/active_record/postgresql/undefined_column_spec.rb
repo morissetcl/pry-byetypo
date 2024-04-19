@@ -2,7 +2,7 @@
 
 require "active_record"
 
-RSpec.describe Exceptions::ActiveRecord::StatementInvalid::UndefinedColumn do
+RSpec.describe Exceptions::ActiveRecord::Postgresql::UndefinedColumn do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
