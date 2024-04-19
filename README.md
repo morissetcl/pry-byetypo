@@ -5,7 +5,7 @@ Autocorrects typos in your Pry console.
 This small Pry plugin captures exceptions that may arise from typos and deduces the correct command based on your database information and session history.
 
 > [!NOTE]
-> Currently, this plugin is not truly ORM-agnostic; to fully benefit from it, ActiveRecord is required.
+> Currently, this plugin is not truly agnostic; to fully benefit from it, ActiveRecord with PostgreSQL is required.
 
 ## Installation
 
