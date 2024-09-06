@@ -15,7 +15,12 @@ module Exceptions
     end
 
     def dictionary
-      eval(infer_klass).methods.map(&:to_s) # rubocop:disable Security/Eval
+      klass_methods = eval(infer_klass).methods # rubocop:disable Security/Eval
+      # Early return because built_in class does not have access to `instance_methods`.
+      return klass_methods.map(&:to_s) if built_in_klass
+
+      instance_methods = eval(infer_klass).instance_methods(false) # rubocop:disable Security/Eval
+      instance_methods.push(klass_methods).flatten.map(&:to_s)
     end
 
     def exception_regexp
@@ -34,6 +39,10 @@ module Exceptions
       return klass if klass != "Array"
 
       "[]"
+    end
+
+    def built_in_klass
+      infer_klass == "[]"
     end
   end
 end
