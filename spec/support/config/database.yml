@@ -5,7 +5,9 @@ default: &default
   url: "postgres_development"
 
 development:
-  <<: *default
+  primary:
+    <<: *default
+    database: <%= ActiveModel::Type::Boolean.new.cast(ENV["DISABLED"]) ? "development_primary" : "development" %>
 
 test:
   <<: *default
