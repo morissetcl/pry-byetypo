@@ -65,7 +65,8 @@ module Setup
         end
 
         def database_config
-          YAML.safe_load(File.read(database_config_path), aliases: true)
+          erb_content = ERB.new(File.read(database_config_path)).result
+          YAML.safe_load(erb_content, aliases: true)
         end
 
         def logger
