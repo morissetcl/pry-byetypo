@@ -29,5 +29,5 @@ Gem::Specification.new do |gem|
   gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   gem.require_paths = ["lib"]
   gem.add_development_dependency "rails", "~> 7.0"
-  gem.add_runtime_dependency "pry", ">= 0.13", "< 0.15"
+  gem.add_runtime_dependency "pry", "~> 0.15"
 end
