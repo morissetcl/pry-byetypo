@@ -68,11 +68,12 @@ RSpec.describe Setup::Dictionary::ActiveRecord do
   end
 
   context "given a staled store" do
-    before { store.transaction { store["synced_at"] = current_time } }
+    before do
+      allow(Time).to receive(:now).and_return(current_time)
+      store.transaction { store["synced_at"] = current_time }
+    end
 
     it "populates stores with synced_at" do
-      allow(Time).to receive(:now).and_return(current_time)
-
       subject
 
       expect(store.transaction { store["synced_at"] }).to eq(current_time)
