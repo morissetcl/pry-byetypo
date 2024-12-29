@@ -27,11 +27,21 @@ module Exceptions
       /`([^']+)' for/
     end
 
+    def klass_regexp
+      return /for an instance of (\w+)/ if instance_exception?
+
+      /for #<(\w+)/
+    end
+
     def klass
       @klass ||= begin
-        exception_without_class_module = exception.to_s.match(/for #<(\w+)/)
+        exception_without_class_module = exception.to_s.match(klass_regexp)
         exception_without_class_module[1]
       end
+    end
+
+    def instance_exception?
+      exception.to_s.include?("for an instance of")
     end
 
     # [].methods and Array.methods have a different output.

@@ -39,16 +39,14 @@ class ExceptionsBase < Base
   end
 
   def corrected_word
-    @corrected_word ||= begin
-      did_you_mean_output ||
+    @corrected_word ||= did_you_mean_output ||
       spell_checker.correct(unknown_from_exception).first
-    end
   end
 
   def did_you_mean_output
     match_data = exception.message.match(/Did you mean\?\s+(\w+)/)
     return unless match_data
-    
+
     match_data[1]
   end
 
