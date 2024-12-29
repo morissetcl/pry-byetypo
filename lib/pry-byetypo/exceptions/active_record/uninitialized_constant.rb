@@ -8,7 +8,8 @@ module Exceptions
       private
 
       def unknown_from_exception
-        exception.to_s.split.last
+        # Returns the first word after Unitialized constant error message.
+        exception.to_s.split[2]
       end
 
       def corrected_cmd

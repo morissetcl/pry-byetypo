@@ -28,8 +28,10 @@ module Exceptions
     end
 
     def klass
-      exception_without_class_module = exception.to_s.gsub(":Class", "")
-      exception_without_class_module.split.last
+      @klass ||= begin
+        exception_without_class_module = exception.to_s.match(/for #<(\w+)/)
+        exception_without_class_module[1]
+      end
     end
 
     # [].methods and Array.methods have a different output.
