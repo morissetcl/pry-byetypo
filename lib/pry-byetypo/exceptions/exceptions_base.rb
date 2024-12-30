@@ -29,6 +29,8 @@ class ExceptionsBase < Base
   end
 
   def can_correct?
+    return true if did_you_mean_output
+
     error_from_typo? && dictionary && corrected_word
   end
 
@@ -37,7 +39,15 @@ class ExceptionsBase < Base
   end
 
   def corrected_word
-    @corrected_word ||= spell_checker.correct(unknown_from_exception).first
+    @corrected_word ||= did_you_mean_output ||
+      spell_checker.correct(unknown_from_exception).first
+  end
+
+  def did_you_mean_output
+    match_data = exception.message.match(/Did you mean\?\s+(\w+)/)
+    return unless match_data
+
+    match_data[1]
   end
 
   def spell_checker
