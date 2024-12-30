@@ -29,6 +29,17 @@ RSpec.describe Exceptions::NoMethodError do
         end
       end
 
+      context "given a class method" do
+        let(:last_cmd) { "User.freze" }
+        let(:exception) { NoMethodError.new("undefined method `freze' for class User") }
+        let(:corrected_cmd) { "User.freeze" }
+
+        it "outputs a corrected command and runs it" do
+          expect(pry).to receive(:eval).with(corrected_cmd)
+          subject
+        end
+      end
+
       context "given an undefined method for a built in class" do
         let(:last_cmd) { "[1].firsst" }
         let(:exception) { NoMethodError.new("undefined method `firsst' for an instance of Array (NoMethodError)") }
