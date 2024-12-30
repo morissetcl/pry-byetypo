@@ -8,6 +8,8 @@ class ExceptionsBase < Base
   include Setup::Store
 
   def call
+    p dictionary
+
     if can_correct?
       logger.error("\e[1;31m#{exception}\e[0m")
       logger.info("\e[1;32mRunning: #{corrected_cmd}\e[0m")

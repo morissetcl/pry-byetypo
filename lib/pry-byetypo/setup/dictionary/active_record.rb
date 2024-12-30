@@ -3,6 +3,7 @@
 require_relative "../checks/database_url"
 require_relative "../checks/database_pool"
 require_relative "../store"
+require_relative "../database"
 
 require "pstore"
 
@@ -30,8 +31,7 @@ module Setup
         end
 
         def establish_db_connection
-          configuration_checks
-          ::ActiveRecord::Base.establish_connection(development_database_config)
+          ::ActiveRecord::Base.establish_connection(Setup::Database.config)
         end
 
         def populate_active_record_models_dictionary
@@ -53,28 +53,6 @@ module Setup
           return model.name, modules if modules.count > 1
 
           model.name
-        end
-
-        def development_database_config
-          @development_database_config ||= database_config["development"]
-        end
-
-        def configuration_checks
-          Setup::Checks::DatabaseUrl.check(development_database_config, logger)
-          Setup::Checks::DatabasePool.check(development_database_config, logger)
-        end
-
-        def database_config
-          erb_content = ERB.new(File.read(database_config_path)).result
-          YAML.safe_load(erb_content, aliases: true)
-        end
-
-        def logger
-          @logger = Logger.new($stdout)
-        end
-
-        def database_config_path
-          ENV["DB_CONFIG_PATH"] || "./config/database.yml"
         end
       end
     end

@@ -6,12 +6,14 @@ class User
   end
 end
 
+
 RSpec.describe Exceptions::NoMethodError do
   subject { described_class.call(output, exception, pry) }
 
   let(:output) { Pry::Output.new(pry) }
   let(:pry) { Pry.new(output: StringIO.new) }
 
+  
   describe "#call" do
     before { allow(Pry).to receive(:line_buffer).and_return([last_cmd]) }
 
@@ -46,6 +48,8 @@ RSpec.describe Exceptions::NoMethodError do
         let(:corrected_cmd) { "[1].first" }
 
         it "outputs a corrected command and runs it" do
+          Rails.application.eager_load!
+
           expect(pry).to receive(:eval).with(corrected_cmd)
           subject
         end

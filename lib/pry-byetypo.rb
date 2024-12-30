@@ -11,6 +11,7 @@ require_relative "pry-byetypo/version"
 module Pry::Byetypo
   Pry.config.hooks.add_hook(:before_session, :create_dictionary) do |_output, binding, _pry|
     Setup::ApplicationDictionary.call(binding)
+    @configuration_checks = Setup::Checks::DatabaseUrl.check, Setup::Checks::DatabasePool.check
   end
 
   Pry.config.hooks.add_hook(:after_read, :populate_session_history) do |_output, binding, _pry|
@@ -24,6 +25,11 @@ module Pry::Byetypo
   # TODO: Adds max_attempts
   # TODO: If max_attempt reached clean the last entries (eg: max entry 3 has been reached, we remove the last 3 history entries)
   Pry.config.exception_handler = proc do |output, exception, pry|
-    ExceptionsHandler.call(output, exception, pry)
+    # Don't use pry-byetypo if some configuration are missing.
+    if @configuration_checks.include?(false)
+      ExceptionsHandler.call(output, exception, pry)
+    else
+      ExceptionsHandler.call(output, exception, pry)
+    end
   end
 end
