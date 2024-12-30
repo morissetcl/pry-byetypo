@@ -20,7 +20,10 @@ module Exceptions
       return klass_methods.map(&:to_s) if built_in_klass
 
       instance_methods = eval(infer_klass).instance_methods(false) # rubocop:disable Security/Eval
-      instance_methods.push(klass_methods).flatten.map(&:to_s)
+      instance_methods.push(klass_methods)
+        .push(ActiveRecord::Base.methods)
+        .flatten
+        .map(&:to_s)
     end
 
     def exception_regexp
@@ -29,6 +32,7 @@ module Exceptions
 
     def klass_regexp
       return /for an instance of (\w+)/ if instance_exception?
+      return /for class (\w+)/ if exception.to_s.include?("class")
 
       /for #<(\w+)/
     end
