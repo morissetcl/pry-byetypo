@@ -8,7 +8,7 @@ module Exceptions
       private
 
       def corrected_cmd
-        @corrected_cmd ||= last_cmd.gsub(/\b#{unknown_from_exception}\b/, corrected_word)
+        @corrected_cmd ||= last_cmd.gsub(/\b#{unknown_from_exception}\b/, corrected_word.to_s)
       end
 
       def unknown_from_exception
