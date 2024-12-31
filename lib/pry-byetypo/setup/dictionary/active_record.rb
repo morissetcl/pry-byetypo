@@ -37,13 +37,15 @@ module Setup
 
         def populate_active_record_models_dictionary
           Zeitwerk::Loader.eager_load_all
-          ::ActiveRecord::Base.descendants.map { |model| format_active_record_model(model) }.flatten
+          models.map { |model| format_active_record_model(model) }.flatten
         end
 
         def populate_associations
-          table_names = ::ActiveRecord::Base.connection.tables
-          singularize_table_names = table_names.map { |a| a.chop }
-          table_names.zip(singularize_table_names).flatten
+          models.map { |model| model.reflect_on_all_associations.map(&:name) }.flatten.uniq
+        end
+
+        def models
+          @models ||= ::ActiveRecord::Base.descendants
         end
 
         # This method takes an ActiveRecord model as an argument and formats its name and module information.

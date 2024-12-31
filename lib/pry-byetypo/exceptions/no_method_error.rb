@@ -16,10 +16,11 @@ module Exceptions
 
     def dictionary
       @dictionary ||= begin
-        _klass = eval(infer_klass)  # rubocop:disable Security/Eval
-        klass_methods = _klass.methods
-        instance_methods = _klass.respond_to?(:instance_methods) ? _klass.instance_methods(false) : []
-        column_names = _klass.respond_to?(:column_names) ? _klass.column_names : []
+        klass_eval = eval(infer_klass)  # rubocop:disable Security/Eval
+        klass_methods = klass_eval.methods
+        # Conditions below exist because built_in class does not have access to `instance_methods` or `column_names`. eg: []
+        instance_methods = klass_eval.respond_to?(:instance_methods) ? klass_eval.instance_methods(false) : []
+        column_names = klass_eval.respond_to?(:column_names) ? klass_eval.column_names : []
 
         [instance_methods, klass_methods, model_associations, column_names, active_records_methods].flatten.map(&:to_s)
       end
@@ -32,7 +33,6 @@ module Exceptions
     def active_records_methods
       store.transaction { |s| [s["ar_methods"]] }
     end
-
 
     def exception_regexp
       /`([^']+)' for/
