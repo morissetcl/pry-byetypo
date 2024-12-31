@@ -3,16 +3,14 @@
 require "zeitwerk"
 require "active_record"
 
-class PostgreSQLAdapter
-  def tables
-    ["users", "accounts", "deals"]
-  end
+class TestUser < ActiveRecord::Base
+  has_many :deals
 end
 
-class User; end
-
 module Account
-  class Deal; end
+  class Deal < ActiveRecord::Base
+    belongs_to :user
+  end
 end
 
 RSpec.describe Setup::Dictionary::ActiveRecord do
@@ -34,8 +32,6 @@ RSpec.describe Setup::Dictionary::ActiveRecord do
 
     allow(Zeitwerk::Loader).to receive(:eager_load_all)
     allow(ActiveRecord::Base).to receive(:establish_connection)
-    allow(ActiveRecord::Base).to receive(:connection).and_return(PostgreSQLAdapter.new)
-    allow(ActiveRecord::Base).to receive(:descendants).and_return([User, Account::Deal])
   end
 
   context "given a staled store" do
@@ -49,13 +45,19 @@ RSpec.describe Setup::Dictionary::ActiveRecord do
     it "populates stores with associations" do
       subject
 
-      expect(store.transaction { store["associations"] }).to eq(["users", "user", "accounts", "account", "deals", "deal"])
+      expect(store.transaction { store["associations"] }).to match_array([:deals, :user])
+    end
+
+    it "populates stores with ActiveRecord::Base.methods" do
+      subject
+
+      expect(store.transaction { store["ar_methods"] }).to match_array(::ActiveRecord::Base.methods)
     end
 
     it "populates stores with active_record_models" do
       subject
 
-      expect(store.transaction { store["active_record_models"] }).to eq(["User", "Account::Deal", "Account", "Deal"])
+      expect(store.transaction { store["active_record_models"] }).to match_array(["TestUser", "Account::Deal", "Account", "Deal"])
     end
 
     it "populates stores with synced_at" do
