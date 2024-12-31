@@ -25,6 +25,7 @@ module Setup
 
             store["active_record_models"] = populate_active_record_models_dictionary
             store["associations"] = populate_associations
+            store["ar_methods"] = ::ActiveRecord::Base.methods
             store["synced_at"] = Time.now
           end
         end
