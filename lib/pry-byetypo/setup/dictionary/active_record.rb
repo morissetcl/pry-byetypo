@@ -32,8 +32,10 @@ module Setup
         end
 
         def establish_db_connection
-          configuration_checks
+          ::ActiveRecord::Base.connection
           ::ActiveRecord::Base.establish_connection(development_database_config)
+        rescue StandardError => e
+          logger.warn("[PRY-BYETYPO] Can't connect to the database using the configuration in database.yml. Please assign a value to ENV['DATABASE_URL'].")
         end
 
         def populate_active_record_models_dictionary
